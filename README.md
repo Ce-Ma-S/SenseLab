@@ -4,4 +4,10 @@
 
 Prototype of new SenseLab using AllJoyn and Universal Windows Platform.
 
-For more information have a look at [project site](http://ce-ma-s.net/en/projekty/software/senselab/start).
+![SenseLab logo](SenseLab.png)
+
+You can visit project page at
+  - Czech
+    - http://ce-ma-s.net/projekty/software/senselab/start
+  - English
+    - http://ce-ma-s.net/en/projekty/software/senselab/start
