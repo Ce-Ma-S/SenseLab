@@ -8,7 +8,8 @@ namespace SenseLab.Common.Commands
     public interface ICommand :
         IObjectItem
     {
-        IEnumerable<ICommandParameterInfo> Parameters { get; }
+        IReadOnlyList<ICommandParameterInfo> Parameters { get; }
+        bool IsCancellable { get; }
 
         event EventHandler<CommandExecuteEventArgs> CanExecuteChanged;
 

@@ -5,8 +5,8 @@ namespace SenseLab.Common.Records
     public interface IRecordItem
     {
         TimeSpan Start { get; set; }
-        TimeSpan Duration { get; set; }
-        TimeSpan End { get; }
+        TimeSpan Duration { get; }
+        TimeSpan End { get; set; }
         object Data { get; }
     }
 }

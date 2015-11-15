@@ -6,19 +6,31 @@ namespace SenseLab.Common.Objects
     public interface IObject :
         IItem<Guid>
     {
+        #region Identification
+
         IObjectType Type { get; }
-        string Path { get; }
+        //string Path { get; }
+
+        #endregion
+
+        #region IsAlive
 
         bool IsAlive { get; }
         event EventHandler IsAliveChanged;
 
-        IEnumerable<IObjectItem> Items { get; }
+        #endregion
+
+        #region Items
+
+        IReadOnlyList<IObjectItem> Items { get; }
         IObjectItem this[string id] { get; }
+
+        #endregion
 
         #region Hierarchy
 
         IObject Parent { get; }
-        IEnumerable<IObject> Children { get; }
+        IReadOnlyList<IObject> Children { get; }
 
         #endregion
     }

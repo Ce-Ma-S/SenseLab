@@ -7,7 +7,7 @@ namespace SenseLab.Common.Events
     public interface IEvent :
         IObjectItem
     {
-        IEnumerable<IEventArgumentInfo> Arguments { get; }
+        IReadOnlyList<IEventArgumentInfo> Arguments { get; }
         event EventHandler<EventOccuredArgs> Occured;
     }
 }

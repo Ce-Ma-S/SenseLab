@@ -1,8 +1,12 @@
-﻿namespace SenseLab.Common
+﻿using CeMaS.Common;
+using System;
+
+namespace SenseLab.Common
 {
-    public interface IItem<T>
+    public interface IItem<T> :
+        IId<T>
+        where T : IEquatable<T>
     {
-        T Id { get; }
         string Name { get; }
         string Description { get; }
     }

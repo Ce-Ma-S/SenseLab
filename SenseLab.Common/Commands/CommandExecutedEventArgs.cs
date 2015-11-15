@@ -9,17 +9,19 @@ namespace SenseLab.Common.Commands
             DateTime start,
             DateTime end,
             object state,
-            bool cancelled,
+            bool isCancelled,
             Exception error,
             params object[] parameters
             ) :
             base(start, state, parameters)
         {
             End = end;
+            IsCancelled = isCancelled;
+            Error = error;
         }
         
         public DateTime End { get; }
-        public bool Cancelled { get; }
+        public bool IsCancelled { get; }
         public Exception Error { get; }
     }
 }
