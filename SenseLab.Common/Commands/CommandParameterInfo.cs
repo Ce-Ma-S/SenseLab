@@ -1,4 +1,5 @@
-﻿using SenseLab.Common.Values;
+﻿using SenseLab.Common.Properties;
+using SenseLab.Common.Values;
 
 namespace SenseLab.Common.Commands
 {
@@ -12,6 +13,13 @@ namespace SenseLab.Common.Commands
             string description = null
             ) :
             base(id, name, description)
+        {
+        }
+
+        public CommandParameterInfo(
+            IProperty<T> property
+            ) :
+            base(property.Id, property.Name, property.Description)
         {
         }
     }

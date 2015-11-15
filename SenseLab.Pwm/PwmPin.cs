@@ -2,6 +2,7 @@
 using SenseLab.Common.Commands;
 using SenseLab.Common.Objects;
 using SenseLab.Common.Properties;
+using SenseLab.Common.Units;
 using Windows.Devices.Pwm;
 
 namespace SenseLab.Pwm
@@ -9,10 +10,11 @@ namespace SenseLab.Pwm
     public class PwmPin :
         Object
     {
-        public PwmPin(
+        internal PwmPin(
             Pwm pwm,
             System.Guid id,
-            int number
+            int number,
+            Windows.Devices.Pwm.PwmPin pin
             ) :
             base(
                 id,
@@ -23,34 +25,56 @@ namespace SenseLab.Pwm
         {
             pwm.ValidateNonNull(nameof(pwm));
             number.ValidateIn(0, pwm.PinCount.Value);
+            pin.ValidateNonNull(nameof(pin));
             Pwm = pwm;
+            Pin = pin;
 
-            Number = new Property<int>(this, nameof(Number), "Number", number);
+            Number = new Property<int>(this,
+                nameof(Number), "Number", number);
             Items.Add(Number);
 
-            IsOpen = new Property<bool>(this, nameof(IsOpen), "Is open", false);
-            Items.Add(IsOpen);
             DelegateCommand command;
-            command = new DelegateCommand(this, nameof(Open), "Open", () => Open(), () => CanOpen);
-            Items.Add(command);
-            command = new DelegateCommand(this, nameof(Close), "Close", () => Close(), () => CanClose);
+            command = new DelegateCommand(this,
+                nameof(Close), "Close",
+                () => Close()
+                );
             Items.Add(command);
 
-            IsStarted = new Property<bool>(this, nameof(IsStarted), "Is started", false);
+            IsStarted = new Property<bool>(this,
+                nameof(IsStarted), "Is started", false);
             Items.Add(IsStarted);
-            command = new DelegateCommand(this, nameof(Start), "Start", () => Start(), () => CanStart);
+            command = new DelegateCommand(this,
+                nameof(Start), "Start",
+                () => Start(),
+                () => CanStart
+                );
             Items.Add(command);
-            command = new DelegateCommand(this, nameof(Stop), "Stop", () => Stop(), () => CanStop);
+            command = new DelegateCommand(this,
+                nameof(Stop), "Stop",
+                () => Stop(),
+                () => CanStop
+                );
             Items.Add(command);
 
-            DutyCyclePercentage = new Property<double>(this, nameof(DutyCyclePercentage), "Duty cycle percentage");
+            DutyCyclePercentage = new PhysicalProperty<double>(this,
+                nameof(DutyCyclePercentage), "Duty cycle", pin.GetActiveDutyCyclePercentage(), Units.Percentage
+                );
             Items.Add(DutyCyclePercentage);
-            command = new DelegateCommand<double>(this, nameof(SetDutyCyclePercentage), "Set duty cycle percentage", p => SetDutyCyclePercentage(p), p => CanSetDutyCyclePercentage(p));
+            command = new DelegateCommand<double>(this,
+                nameof(SetDutyCyclePercentage), "Set duty cycle",
+                p => SetDutyCyclePercentage(p),
+                p => CanSetDutyCyclePercentage(p),
+                parameters: new CommandPhysicalParameterInfo<double>(DutyCyclePercentage)
+                );
             Items.Add(command);
 
-            Polarity = new Property<PwmPulsePolarity>(this, nameof(Polarity), "Polarity");
+            Polarity = new Property<PwmPulsePolarity>(this, nameof(Polarity), "Polarity", pin.Polarity);
             Items.Add(Polarity);
-            command = new DelegateCommand<PwmPulsePolarity>(this, nameof(SetPolarity), "Set polarity", p => SetPolarity(p), p => CanSetPolarity);
+            command = new DelegateCommand<PwmPulsePolarity>(this,
+                nameof(SetPolarity), "Set polarity",
+                p => SetPolarity(p),
+                parameters: new CommandParameterInfo<PwmPulsePolarity>(Polarity)
+                );
             Items.Add(command);
         }
 
@@ -60,29 +84,11 @@ namespace SenseLab.Pwm
         }
         public Property<int> Number { get; }
 
-        public Property<bool> IsOpen { get; }
-        public bool CanOpen
-        {
-            get { return !IsOpen.Value; }
-        }
-        public void Open()
-        {
-            Pin = Pwm.Controller.OpenPin(Number.Value);
-            IsOpen.Value = true;
-            DutyCyclePercentage.Value = Pin.GetActiveDutyCyclePercentage();
-            Polarity.Value = Pin.Polarity;
-        }
-        public bool CanClose
-        {
-            get { return IsOpen.Value; }
-        }
         public void Close()
         {
             Pin.Dispose();
             Pin = null;
-            IsOpen.Value = false;
-            DutyCyclePercentage.HasValue = false;
-            Polarity.HasValue = false;
+            Pwm.Children.Remove(this);
         }
 
         public Property<bool> IsStarted { get; }
@@ -92,10 +98,8 @@ namespace SenseLab.Pwm
         }
         public void Start()
         {
-            if (!IsOpen.Value)
-                Open();
             Pin.Start();
-            IsOpen.Value = true;
+            IsStarted.Value = true;
         }
         public bool CanStop
         {
@@ -104,30 +108,27 @@ namespace SenseLab.Pwm
         public void Stop()
         {
             Pin.Stop();
-            IsOpen.Value = false;
+            IsStarted.Value = false;
         }
 
-        public Property<double> DutyCyclePercentage { get; }
+        public PhysicalProperty<double> DutyCyclePercentage { get; }
         public bool CanSetDutyCyclePercentage(double value)
         {
             return
                 value >= 0 &&
-                value <= 100 &&
-                IsOpen.Value;
+                value <= 100;
         }
         public void SetDutyCyclePercentage(double value)
         {
             Pin.SetActiveDutyCyclePercentage(value);
+            DutyCyclePercentage.Value = Pin.GetActiveDutyCyclePercentage();
         }
 
         public Property<PwmPulsePolarity> Polarity { get; }
-        public bool CanSetPolarity
-        {
-            get { return IsOpen.Value; }
-        }
         public void SetPolarity(PwmPulsePolarity value)
         {
             Pin.Polarity = value;
+            Polarity.Value = value;
         }
 
         protected Pwm Pwm { get; }

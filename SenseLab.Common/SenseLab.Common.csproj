@@ -113,6 +113,7 @@
     <Compile Include="..\SenseLab.AssemblyInfo.cs">
       <Link>Properties\SenseLab.AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Commands\CommandPhysicalParameterInfo.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandExecutedEventArgs.cs" />
@@ -140,12 +141,17 @@
     <Compile Include="Objects\ObjectItem.cs" />
     <Compile Include="Objects\ObjectType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\IPhysicalProperty.cs" />
+    <Compile Include="Properties\PhysicalProperty.cs" />
     <Compile Include="Properties\Property.cs" />
     <Compile Include="Properties\IProperty.cs" />
     <Compile Include="Records\IRecord.cs" />
     <Compile Include="Objects\IObject.cs" />
     <Compile Include="Records\ICompositeRecordItem.cs" />
     <Compile Include="Records\IRecordItem.cs" />
+    <Compile Include="Units\Units.cs" />
+    <Compile Include="Values\IPhysicalValueInfoWritable.cs" />
+    <Compile Include="Values\IPhysicalValueInfo.cs" />
     <Compile Include="Values\IValueInfoWritable.cs" />
     <Compile Include="Values\ValueInfo.cs" />
     <Compile Include="Values\IValueInfo.cs" />
