@@ -1,7 +1,6 @@
 ﻿using CeMaS.Common.Events;
 using CeMaS.Common.Validation;
 using SenseLab.Common.Objects;
-using System;
 using System.Collections.Generic;
 
 namespace SenseLab.Common.Events
@@ -11,7 +10,7 @@ namespace SenseLab.Common.Events
         IEvent
     {
         public Event(
-            IObject @object,
+            Object @object,
             string id,
             string name,
             string description = null,
@@ -28,7 +27,7 @@ namespace SenseLab.Common.Events
             get { return Arguments; }
         }
 
-        public event EventHandler<EventOccuredArgs> Occured;
+        public event System.EventHandler<EventOccuredArgs> Occured;
 
         protected virtual void OnOccured(params object[] arguments)
         {

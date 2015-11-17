@@ -1,4 +1,5 @@
-﻿using CeMaS.Common.Validation;
+﻿using CeMaS.Common.Units;
+using CeMaS.Common.Validation;
 using SenseLab.Common.Objects;
 using SenseLab.Common.Values;
 
@@ -12,10 +13,10 @@ namespace SenseLab.Common.Properties
         #region Init
 
         public PhysicalProperty(
-            IObject @object,
+            Object @object,
             string id,
             string name,
-            string unit,
+            Unit unit,
             string description = null
             ) :
             base(@object, id, name, description)
@@ -24,11 +25,11 @@ namespace SenseLab.Common.Properties
         }
 
         public PhysicalProperty(
-            IObject @object,
+            Object @object,
             string id,
             string name,
             T value,
-            string unit,
+            Unit unit,
             string description = null
             ) :
             base(@object, id, name, value, description)
@@ -38,7 +39,7 @@ namespace SenseLab.Common.Properties
 
         #endregion
 
-        public string Unit
+        public Unit Unit
         {
             get { return unit; }
             set
@@ -48,6 +49,6 @@ namespace SenseLab.Common.Properties
             }
         }
 
-        private string unit;
+        private Unit unit;
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace SenseLab.Common.Objects
 {
     public interface IObjectItem :
-        IItem<string>
+        IObjectItemInfo
     {
-        IObject Object { get; }
+        new IObject Object { get; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CeMaS.Common.Validation;
+﻿using CeMaS.Common.Units;
+using CeMaS.Common.Validation;
 using SenseLab.Common.Properties;
 using SenseLab.Common.Values;
 
@@ -13,7 +14,7 @@ namespace SenseLab.Common.Commands
         public CommandPhysicalParameterInfo(
             string id,
             string name,
-            string unit,
+            Unit unit,
             string description = null
             ) :
             base(id, name, description)
@@ -31,7 +32,7 @@ namespace SenseLab.Common.Commands
 
         #endregion
 
-        public string Unit
+        public Unit Unit
         {
             get { return unit; }
             set
@@ -41,6 +42,6 @@ namespace SenseLab.Common.Commands
             }
         }
 
-        private string unit;
+        private Unit unit;
     }
 }

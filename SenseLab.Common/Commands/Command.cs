@@ -1,7 +1,6 @@
 ﻿using CeMaS.Common;
 using CeMaS.Common.Events;
 using SenseLab.Common.Objects;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +12,7 @@ namespace SenseLab.Common.Commands
         ICommand
     {
         public Command(
-            IObject @object,
+            Object @object,
             string id,
             string name,
             bool isCancellable,
@@ -33,9 +32,9 @@ namespace SenseLab.Common.Commands
         }
         public bool IsCancellable { get; }
 
-        public event EventHandler<CommandExecuteEventArgs> CanExecuteChanged;
-        public event EventHandler<CommandExecutingEventArgs> Executing;
-        public event EventHandler<CommandExecutedEventArgs> Executed;
+        public event System.EventHandler<CommandExecuteEventArgs> CanExecuteChanged;
+        public event System.EventHandler<CommandExecutingEventArgs> Executing;
+        public event System.EventHandler<CommandExecutedEventArgs> Executed;
 
         public bool CanExecute(params object[] parameters)
         {
@@ -49,7 +48,7 @@ namespace SenseLab.Common.Commands
             CancellationTokenSource cancellation = IsCancellable ?
                 new CancellationTokenSource() :
                 null;
-            var start = DateTime.Now;
+            var start = System.DateTime.Now;
             try
             {
                 OnExecuting(
@@ -64,18 +63,18 @@ namespace SenseLab.Common.Commands
                     );
                 OnExecuted(
                     start,
-                    DateTime.Now,
+                    System.DateTime.Now,
                     false,
                     null,
                     parameters
                     );
             }
-            catch (Exception error)
+            catch (System.Exception error)
             {
-                bool isCancelled = error is OperationCanceledException;
+                bool isCancelled = error is System.OperationCanceledException;
                 OnExecuted(
                     start,
-                    DateTime.Now,
+                    System.DateTime.Now,
                     isCancelled,
                     isCancelled ?
                         null :
@@ -94,7 +93,7 @@ namespace SenseLab.Common.Commands
         protected abstract Task DoExecute(CancellationToken? cancellation, object[] parameters);
 
         protected virtual void OnExecuting(
-            DateTime start,
+            System.DateTime start,
             object state,
             CancellationTokenSource cancellation,
             params object[] parameters
@@ -109,16 +108,16 @@ namespace SenseLab.Common.Commands
         }
 
         protected virtual void OnExecuted(
-            DateTime start,
+            System.DateTime start,
             object state,
             bool isCancelled,
-            Exception error,
+            System.Exception error,
             params object[] parameters
             )
         {
             Executed.RaiseEvent(this, () => new CommandExecutedEventArgs(
                 start,
-                DateTime.Now,
+                System.DateTime.Now,
                 state,
                 isCancelled,
                 error,

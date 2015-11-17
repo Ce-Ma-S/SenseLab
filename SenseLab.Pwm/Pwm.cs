@@ -1,8 +1,8 @@
-﻿using CeMaS.Common.Validation;
+﻿using CeMaS.Common.Units;
+using CeMaS.Common.Validation;
 using SenseLab.Common.Commands;
 using SenseLab.Common.Objects;
 using SenseLab.Common.Properties;
-using SenseLab.Common.Units;
 using System.Linq;
 using Windows.Devices.Pwm;
 
@@ -12,14 +12,15 @@ namespace SenseLab.Pwm
         Object
     {
         public Pwm(
-            System.Guid id,
+            ObjectEnvironment environment,
+            string id,
             string name,
             PwmController controller,
             string description = null,
-            IObject parent = null
+            Object parent = null
             ) :
             base(
-                id, name,
+                environment, id, name,
                 new ObjectType("PWM", "PWM", "Pulse width modulation"),
                 description, parent
                 )
@@ -80,7 +81,7 @@ namespace SenseLab.Pwm
             if (pin == null)
             {
                 pin = new PwmPin(this,
-                    System.Guid.NewGuid(),
+                    string.Format($"Pin{number}"),
                     number,
                     Controller.OpenPin(number)
                     );

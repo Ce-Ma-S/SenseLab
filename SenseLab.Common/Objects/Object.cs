@@ -8,32 +8,20 @@ using System.Collections.ObjectModel;
 namespace SenseLab.Common.Objects
 {
     public abstract class Object :
-        Item<Guid>,
+        ObjectInfo,
         IObject
     {
         public Object(
-            Guid id,
+            ObjectEnvironment environment,
+            string id,
             string name,
             ObjectType type,
             string description = null,
-            IObject parent = null
+            Object parent = null
             ) :
-            base(id, name, description)
+            base(environment, id, name, type, description, parent)
         {
-            type.ValidateNonNull(nameof(type));
-            Type = type;
-            Parent = parent;
         }
-
-        #region Identification
-
-        public ObjectType Type { get; }
-        IObjectType IObject.Type
-        {
-            get { return Type; }
-        }
-
-        #endregion
 
         #region IsAlive
 
@@ -49,8 +37,8 @@ namespace SenseLab.Common.Objects
 
         #region Items
 
-        public ObservableCollection<IObjectItemWritable> Items { get; } =
-            new ObservableCollection<IObjectItemWritable>();
+        public ObservableCollection<ObjectItem> Items { get; } =
+            new ObservableCollection<ObjectItem>();
         IReadOnlyList<IObjectItem> IObject.Items
         {
             get { return Items; }
@@ -67,12 +55,26 @@ namespace SenseLab.Common.Objects
 
         #region Hierarchy
 
-        public IObject Parent
+        public new ObjectEnvironment Environment
         {
-            get;
+            get { return (ObjectEnvironment)base.Environment; }
         }
-        public ObservableCollection<IObject> Children { get; } =
-            new ObservableCollection<IObject>();
+        IObjectEnvironment IObject.Environment
+        {
+            get { return Environment; }
+        }
+
+        public new Object Parent
+        {
+            get { return (Object)base.Parent; }
+        }
+        IObject IObject.Parent
+        {
+            get { return Parent; }
+        }
+
+        public ObservableCollection<Object> Children { get; } =
+            new ObservableCollection<Object>();
         IReadOnlyList<IObject> IObject.Children
         {
             get { return Children; }

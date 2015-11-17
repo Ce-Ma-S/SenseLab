@@ -1,19 +1,20 @@
-﻿namespace SenseLab.Common.Objects
+﻿using System;
+
+namespace SenseLab.Common.Objects
 {
-    public class ObjectType :
-        Item<string>,
-        IObjectType
+    public class ObjectEnvironmentInfo :
+        Item<Guid>,
+        IObjectEnvironmentInfo
     {
-        public ObjectType(
-            string id,
+        public ObjectEnvironmentInfo(
+            Guid id,
             string name,
             string description = null
             ) :
             base(id, name, description)
         {
         }
-
-        public ObjectType(IObjectType value) :
+        public ObjectEnvironmentInfo(IObjectEnvironmentInfo value) :
             this(
                 value.Id,
                 value.Name,

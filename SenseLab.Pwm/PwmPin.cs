@@ -1,8 +1,8 @@
-﻿using CeMaS.Common.Validation;
+﻿using CeMaS.Common.Units;
+using CeMaS.Common.Validation;
 using SenseLab.Common.Commands;
 using SenseLab.Common.Objects;
 using SenseLab.Common.Properties;
-using SenseLab.Common.Units;
 using Windows.Devices.Pwm;
 
 namespace SenseLab.Pwm
@@ -12,11 +12,12 @@ namespace SenseLab.Pwm
     {
         internal PwmPin(
             Pwm pwm,
-            System.Guid id,
+            string id,
             int number,
             Windows.Devices.Pwm.PwmPin pin
             ) :
             base(
+                pwm.Environment,
                 id,
                 string.Format($"Pin {number + 1}"),
                 new ObjectType("PWM pin", "PWM pin", "Pulse width modulation pin"),

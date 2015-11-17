@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CeMaS.Common.Units;
+using System;
 
 namespace SenseLab.Common.Values
 {
@@ -6,6 +7,6 @@ namespace SenseLab.Common.Values
         IValueInfoWritable,
         IPhysicalValueInfo
     {
-        new string Unit { get; set; }
+        new Unit Unit { get; set; }
     }
 }

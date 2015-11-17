@@ -1,15 +1,11 @@
-﻿using SenseLab.Common.Objects;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace SenseLab.Common.Records
 {
     public interface IRecord
     {
-        IObjectItem ObjectItem { get; }
-        IEnumerable<IRecordItem> Items { get; }
-        DateTimeOffset Start { get; }
-        TimeSpan Duration { get; }
-        DateTimeOffset End { get; }
+        TimeSpan Start { get; set; }
+        TimeSpan? Duration { get; }
+        TimeSpan? End { get; set; }
     }
 }

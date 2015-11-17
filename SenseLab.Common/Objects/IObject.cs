@@ -1,25 +1,12 @@
-﻿using System;
+﻿using CeMaS.Common;
 using System.Collections.Generic;
 
 namespace SenseLab.Common.Objects
 {
     public interface IObject :
-        IItem<Guid>
+        IObjectInfo,
+        IAlive
     {
-        #region Identification
-
-        IObjectType Type { get; }
-        //string Path { get; }
-
-        #endregion
-
-        #region IsAlive
-
-        bool IsAlive { get; }
-        event EventHandler IsAliveChanged;
-
-        #endregion
-
         #region Items
 
         IReadOnlyList<IObjectItem> Items { get; }
@@ -29,7 +16,8 @@ namespace SenseLab.Common.Objects
 
         #region Hierarchy
 
-        IObject Parent { get; }
+        new IObjectEnvironment Environment { get; }
+        new IObject Parent { get; }
         IReadOnlyList<IObject> Children { get; }
 
         #endregion

@@ -1,7 +1,5 @@
 ﻿using CeMaS.Common.Events;
 using SenseLab.Common.Objects;
-using SenseLab.Common.Values;
-using System;
 
 namespace SenseLab.Common.Properties
 {
@@ -12,7 +10,7 @@ namespace SenseLab.Common.Properties
         #region Init
 
         public Property(
-            IObject @object,
+            Object @object,
             string id,
             string name,
             string description = null
@@ -22,7 +20,7 @@ namespace SenseLab.Common.Properties
         }
 
         public Property(
-            IObject @object,
+            Object @object,
             string id,
             string name,
             T value,
@@ -35,7 +33,7 @@ namespace SenseLab.Common.Properties
 
         #endregion
 
-        public Type Type
+        public System.Type Type
         {
             get
             {
@@ -55,13 +53,8 @@ namespace SenseLab.Common.Properties
             }
             set
             {
-                SetValue(() => Value, ref this.value, value, OnValueChangedInternal);
+                SetValue(() => Value, ref this.value, value, OnValueChanged);
             }
-        }
-
-        private void OnValueChangedInternal(T oldValue, T newValue)
-        {
-            throw new NotImplementedException();
         }
 
         object IProperty.Value
@@ -72,8 +65,8 @@ namespace SenseLab.Common.Properties
             }
         }
 
-        public event EventHandler<ValueChangeEventArgs<T>> ValueChanged;
-        event EventHandler<ValueChangeEventArgs> IProperty.ValueChanged
+        public event System.EventHandler<ValueChangeEventArgs<T>> ValueChanged;
+        event System.EventHandler<ValueChangeEventArgs> IProperty.ValueChanged
         {
             add
             {
@@ -107,6 +100,6 @@ namespace SenseLab.Common.Properties
         }
 
         private T value;
-        private event EventHandler<ValueChangeEventArgs> valueChangedUntyped;
+        private event System.EventHandler<ValueChangeEventArgs> valueChangedUntyped;
     }
 }

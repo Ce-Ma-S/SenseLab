@@ -1,6 +1,5 @@
 ﻿using CeMaS.Common.Validation;
 using SenseLab.Common.Objects;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,16 +13,17 @@ namespace SenseLab.Common.Commands
         #region Any parameters
 
         public DelegateCommand(
-            IObject @object,
+            Object @object,
             string id,
             string name,
-            Action<object[]> execute,
-            Func<object[], bool> canExecute = null,
+            System.Action<object[]> execute,
+            System.Func<object[], bool> canExecute = null,
             string description = null,
             params ICommandParameterInfoWritable[] parameters
             ) :
             this(
                 @object, id, name, false,
+#pragma warning disable 1998
                 async (c, p) => execute(p),
                 canExecute,
                 description, parameters
@@ -32,11 +32,11 @@ namespace SenseLab.Common.Commands
         }
 
         public DelegateCommand(
-            IObject @object,
+            Object @object,
             string id,
             string name,
-            Func<object[], Task> execute,
-            Func<object[], bool> canExecute = null,
+            System.Func<object[], Task> execute,
+            System.Func<object[], bool> canExecute = null,
             string description = null,
             params ICommandParameterInfoWritable[] parameters
             ) :
@@ -50,11 +50,11 @@ namespace SenseLab.Common.Commands
         }
 
         public DelegateCommand(
-            IObject @object,
+            Object @object,
             string id,
             string name,
-            Func<CancellationToken, object[], Task> execute,
-            Func<object[], bool> canExecute = null,
+            System.Func<CancellationToken, object[], Task> execute,
+            System.Func<object[], bool> canExecute = null,
             string description = null,
             params ICommandParameterInfoWritable[] parameters
             ) :
@@ -72,11 +72,11 @@ namespace SenseLab.Common.Commands
         #region No parameters
 
         public DelegateCommand(
-            IObject @object,
+            Object @object,
             string id,
             string name,
-            Action execute,
-            Func<bool> canExecute = null,
+            System.Action execute,
+            System.Func<bool> canExecute = null,
             string description = null,
             params ICommandParameterInfoWritable[] parameters
             ) :
@@ -90,11 +90,11 @@ namespace SenseLab.Common.Commands
         }
 
         public DelegateCommand(
-            IObject @object,
+            Object @object,
             string id,
             string name,
-            Func<Task> execute,
-            Func<bool> canExecute = null,
+            System.Func<Task> execute,
+            System.Func<bool> canExecute = null,
             string description = null,
             params ICommandParameterInfoWritable[] parameters
             ) :
@@ -108,11 +108,11 @@ namespace SenseLab.Common.Commands
         }
 
         public DelegateCommand(
-            IObject @object,
+            Object @object,
             string id,
             string name,
-            Func<CancellationToken, Task> execute,
-            Func<bool> canExecute = null,
+            System.Func<CancellationToken, Task> execute,
+            System.Func<bool> canExecute = null,
             string description = null,
             params ICommandParameterInfoWritable[] parameters
             ) :
@@ -128,12 +128,12 @@ namespace SenseLab.Common.Commands
         #endregion
 
         private DelegateCommand(
-            IObject @object,
+            Object @object,
             string id,
             string name,
             bool isCancellable,
-            Func<CancellationToken?, object[], Task> execute,
-            Func<object[], bool> canExecute = null,
+            System.Func<CancellationToken?, object[], Task> execute,
+            System.Func<object[], bool> canExecute = null,
             string description = null,
             params ICommandParameterInfoWritable[] parameters
             ) :
@@ -161,8 +161,8 @@ namespace SenseLab.Common.Commands
             return execute(cancellation, parameters);
         }
 
-        private Func<object[], bool> canExecute;
-        private Func<CancellationToken?, object[], Task> execute;
+        private System.Func<object[], bool> canExecute;
+        private System.Func<CancellationToken?, object[], Task> execute;
     }
 
 
@@ -172,11 +172,11 @@ namespace SenseLab.Common.Commands
         #region Init
 
         public DelegateCommand(
-            IObject @object,
+            Object @object,
             string id,
             string name,
-            Action<T> execute,
-            Func<T, bool> canExecute = null,
+            System.Action<T> execute,
+            System.Func<T, bool> canExecute = null,
             string description = null,
             params ICommandParameterInfoWritable[] parameters
             ) :
@@ -190,11 +190,11 @@ namespace SenseLab.Common.Commands
         }
 
         public DelegateCommand(
-            IObject @object,
+            Object @object,
             string id,
             string name,
-            Func<T, Task> execute,
-            Func<T, bool> canExecute = null,
+            System.Func<T, Task> execute,
+            System.Func<T, bool> canExecute = null,
             string description = null,
             params ICommandParameterInfoWritable[] parameters
             ) :
@@ -208,11 +208,11 @@ namespace SenseLab.Common.Commands
         }
 
         public DelegateCommand(
-            IObject @object,
+            Object @object,
             string id,
             string name,
-            Func<CancellationToken, T, Task> execute,
-            Func<T, bool> canExecute = null,
+            System.Func<CancellationToken, T, Task> execute,
+            System.Func<T, bool> canExecute = null,
             string description = null,
             params ICommandParameterInfoWritable[] parameters
             ) :
@@ -229,10 +229,10 @@ namespace SenseLab.Common.Commands
         {
             return (T)p[0];
         }
-        private static Func<object[], bool> CanExecute(Func<T, bool> canExecute)
+        private static System.Func<object[], bool> CanExecute(System.Func<T, bool> canExecute)
         {
             return canExecute == null ?
-                (Func<object[], bool>)null :
+                (System.Func<object[], bool>)null :
                 p => canExecute((T)p[0]);
         }
 

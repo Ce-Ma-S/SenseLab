@@ -1,23 +1,26 @@
-﻿using CeMaS.Common.Validation;
-
-namespace SenseLab.Common.Objects
+﻿namespace SenseLab.Common.Objects
 {
-    public class ObjectItem :
-        Item<string>,
-        IObjectItemWritable
+    public abstract class ObjectItem :
+        ObjectItemInfo,
+        IObjectItem
     {
         public ObjectItem(
-            IObject @object,
+            Object @object,
             string id,
             string name,
             string description = null
             ) :
-            base(id, name, description)
+            base(@object, id, name, description)
         {
-            @object.ValidateNonNull(nameof(@object));
-            Object = @object;
         }
 
-        public IObject Object { get; }
+        public new Object Object
+        {
+            get { return (Object)base.Object; }
+        }
+        IObject IObjectItem.Object
+        {
+            get { return Object; }
+        }
     }
 }
