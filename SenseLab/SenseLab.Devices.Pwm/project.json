@@ -1,8 +1,7 @@
 ﻿{
   "dependencies": {
-    "CeMaS.Common": "1.0.0-beta1",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
-    "SenseLab.Common": "1.0.0-beta1"
+    "CeMaS.Common": "1.0.0-beta2"
   },
   "frameworks": {
     "uap10.0": {}

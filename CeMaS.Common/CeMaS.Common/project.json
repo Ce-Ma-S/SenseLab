@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.0.0-beta1",
+  "version": "1.0.0-beta3",
   "description": "Common functionality",
   "authors": [
     "CeMaS, Czech and Slovak Republic",
@@ -24,6 +24,6 @@
     "System.Threading": "4.0.10"
   },
   "scripts": {
-    "postpack": "if '%build:Configuration%'=='Release' nuget push \"%project:Directory%\\..\\..\\artifacts\\bin\\%project:Name%\\%build:Configuration%\\%project:Name%.%project:Version%.nupkg"
+    "postpack": "if '%build:Configuration%'=='Release' nuget push \"%project:Directory%\\..\\..\\artifacts\\bin\\%project:Name%\\%build:Configuration%\\%project:Name%.%project:Version%.nupkg\""
   }
 }
