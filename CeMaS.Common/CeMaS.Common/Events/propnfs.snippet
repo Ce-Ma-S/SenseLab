@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>Property with change notification</Title>
+      <Author>Marek Ištvánek</Author>
+      <Description>
+        NotifyPropertyChange`s property
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>propnfs</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>Name</ID>
+          <ToolTip>Property name</ToolTip>
+          <Default>Property</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>name</ID>
+          <ToolTip>Property field name</ToolTip>
+          <Default>property</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>type</ID>
+          <ToolTip>Property value type</ToolTip>
+          <Default>object</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$">
+              <![CDATA[#region $Name$
+
+        public $type$ $Name$
+        {
+            get { return $name$; }
+            set
+            {
+                SetPropertyValue(ref this.$name$, value);
+            }
+        }
+
+        private $type$ $name$;
+
+        #endregion]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

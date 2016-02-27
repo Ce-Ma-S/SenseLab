@@ -1,0 +1,20 @@
+﻿{
+  "version": "1.0.0-beta1",
+  "description": "SenseLab - Common functionality",
+  "authors": [
+    "CeMaS, Czech and Slovak Republic",
+    "Marek Ištvánek"
+  ],
+  "tags": [ "SenseLab common environment property command event object record" ],
+  "projectUrl": "http://ce-ma-s.net/en/projekty/software/senselab/",
+  "licenseUrl": "",
+  "frameworks": {
+    "dotnet": { }
+  },
+  "dependencies": {
+    "CeMaS.Common": ""
+  },
+  "scripts": {
+    "postpack": "if '%build:Configuration%'=='Release' nuget push \"%project:Directory%\\..\\..\\artifacts\\bin\\%project:Name%\\%build:Configuration%\\%project:Name%.%project:Version%.nupkg\""
+  }
+}

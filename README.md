@@ -2,7 +2,7 @@
 
 **Open sensors monitoring and device control in Your lab**
 
-Prototype of new SenseLab using AllJoyn and Universal Windows Platform.
+Prototype of SenseLab using .NET Core and Universal Windows Platform.
 
 ![SenseLab logo](SenseLab.png)
 

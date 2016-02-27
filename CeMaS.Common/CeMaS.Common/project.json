@@ -1,0 +1,29 @@
+﻿{
+  "version": "1.0.0-beta1",
+  "description": "Common functionality",
+  "authors": [
+    "CeMaS, Czech and Slovak Republic",
+    "Marek Ištvánek"
+  ],
+  "tags": [ "common metadata collection command event log state unit validation" ],
+  "projectUrl": "http://ce-ma-s.net/en/",
+  "licenseUrl": "",
+  "frameworks": {
+    "dotnet": { }
+  },
+  "dependencies": {
+    "Microsoft.CSharp": "4.0.0",
+    "Rx-Main": "2.2.5",
+    "Serilog": "1.5.14",
+    "System.ComponentModel": "4.0.0",
+    "System.Linq": "4.0.0",
+    "System.Linq.Parallel": "4.0.0",
+    "System.ObjectModel": "4.0.10",
+    "System.Runtime": "4.0.20",
+    "System.Runtime.Serialization.Primitives": "4.0.10",
+    "System.Threading": "4.0.10"
+  },
+  "scripts": {
+    "postpack": "if '%build:Configuration%'=='Release' nuget push \"%project:Directory%\\..\\..\\artifacts\\bin\\%project:Name%\\%build:Configuration%\\%project:Name%.%project:Version%.nupkg"
+  }
+}
