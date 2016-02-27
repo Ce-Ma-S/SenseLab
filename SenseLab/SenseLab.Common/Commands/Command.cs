@@ -92,7 +92,7 @@ namespace SenseLab.Common.Commands
             get { return Results; }
         }
 
-        private TParameter ToParameter(object[] parameter)
+        private static TParameter ToParameter(object[] parameter)
         {
             if (
                 parameter != null &&
@@ -117,7 +117,7 @@ namespace SenseLab.Common.Commands
             return default(TParameter);
         }
 
-        private object[] ToResult(TResult result)
+        private static object[] ToResult(TResult result)
         {
             if (
                 result == null ||
@@ -172,5 +172,113 @@ namespace SenseLab.Common.Commands
             }
             return true;
         }
+    }
+
+
+    public class Command<TParameter> :
+        Command<TParameter, Unit>
+    {
+        #region Init
+
+        public Command(
+                Objects.Object @object,
+                string id,
+                IdentityInfo info,
+                Action<TParameter, CancellationTokenSource> execute,
+                Func<TParameter, bool> canExecute = null,
+                bool isSynchronous = true,
+                bool allowsParallelExecution = false,
+                params ValueInfo[] parameters
+                ) :
+                base(
+                    @object,
+                    id,
+                    info,
+                    (p, c) =>
+                    {
+                        execute(p, c);
+                        return Unit.Default;
+                    },
+                    parameters,
+                    null,
+                    canExecute,
+                    isSynchronous,
+                    allowsParallelExecution
+                    )
+        { }
+
+        public Command(
+            Objects.Object @object,
+            string id,
+            IdentityInfo info,
+            Func<TParameter, CancellationTokenSource, Task> executeTaskFactory,
+            Func<TParameter, bool> canExecute = null,
+            bool allowsParallelExecution = false,
+            params ValueInfo[] parameters
+            ) :
+            base(
+                @object,
+                id,
+                info,
+                async (p, c) =>
+                {
+                    await executeTaskFactory(p, c);
+                    return Unit.Default;
+                },
+                parameters,
+                null,
+                canExecute,
+                allowsParallelExecution
+                )
+        { }
+
+        #endregion
+    }
+
+
+    public class Command :
+        Command<Unit>
+    {
+        #region Init
+
+        public Command(
+                Objects.Object @object,
+                string id,
+                IdentityInfo info,
+                Action<CancellationTokenSource> execute,
+                Func<bool> canExecute = null,
+                bool isSynchronous = true,
+                bool allowsParallelExecution = false
+                ) :
+                base(
+                    @object,
+                    id,
+                    info,
+                    (p, c) => execute(c),
+                    p => canExecute(),
+                    isSynchronous,
+                    allowsParallelExecution
+                    )
+        { }
+
+        public Command(
+            Objects.Object @object,
+            string id,
+            IdentityInfo info,
+            Func<CancellationTokenSource, Task> executeTaskFactory,
+            Func<bool> canExecute = null,
+            bool allowsParallelExecution = false
+            ) :
+            base(
+                @object,
+                id,
+                info,
+                (p, c) => executeTaskFactory(c),
+                p => canExecute(),
+                allowsParallelExecution
+                )
+        { }
+
+        #endregion
     }
 }

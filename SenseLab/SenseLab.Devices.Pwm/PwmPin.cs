@@ -1,8 +1,10 @@
-﻿using CeMaS.Common.Units;
+﻿using CeMaS.Common.Identity;
+using CeMaS.Common.Units;
 using CeMaS.Common.Validation;
 using SenseLab.Common.Commands;
 using SenseLab.Common.Objects;
 using SenseLab.Common.Properties;
+using SenseLab.Common.Values;
 using Windows.Devices.Pwm;
 
 namespace SenseLab.Devices.Pwm
@@ -19,64 +21,58 @@ namespace SenseLab.Devices.Pwm
             base(
                 pwm.Environment,
                 id,
-                string.Format($"Pin {number + 1}"),
-                new ObjectType("PWM pin", "PWM pin", "Pulse width modulation pin"),
+                new IdentityInfo(string.Format($"Pin {number + 1}")),
+                new ObjectType("PWM pin", new IdentityInfo("PWM pin", "Pulse width modulation pin")),
                 parent: pwm
                 )
         {
             pwm.ValidateNonNull(nameof(pwm));
-            number.ValidateIn(0, pwm.PinCount.Value);
+            number.ValidateBetween(0, pwm.PinCount.Value);
             pin.ValidateNonNull(nameof(pin));
             Pwm = pwm;
             Pin = pin;
 
             Number = new Property<int>(this,
-                nameof(Number), "Number", number);
+                nameof(Number), new IdentityInfo("Number"), number);
             Items.Add(Number);
 
-            DelegateCommand command;
-            command = new DelegateCommand(this,
-                nameof(Close), "Close",
-                () => Close()
-                );
-            Items.Add(command);
+            Items.Add(new Command(this,
+                nameof(Close), new IdentityInfo("Close"),
+                c => Close()
+                ));
 
             IsStarted = new Property<bool>(this,
-                nameof(IsStarted), "Is started", false);
+                nameof(IsStarted), new IdentityInfo("Is started"), false);
             Items.Add(IsStarted);
-            command = new DelegateCommand(this,
-                nameof(Start), "Start",
-                () => Start(),
+            Items.Add(new Command(this,
+                nameof(Start), new IdentityInfo("Start"),
+                c => Start(),
                 () => CanStart
-                );
-            Items.Add(command);
-            command = new DelegateCommand(this,
-                nameof(Stop), "Stop",
-                () => Stop(),
+                ));
+            Items.Add(new Command(this,
+                nameof(Stop), new IdentityInfo("Stop"),
+                c => Stop(),
                 () => CanStop
-                );
-            Items.Add(command);
+                ));
 
             DutyCyclePercentage = new PhysicalProperty<double>(this,
-                nameof(DutyCyclePercentage), "Duty cycle", pin.GetActiveDutyCyclePercentage(), Units.Percentage
+                nameof(DutyCyclePercentage), new IdentityInfo("Duty cycle"), pin.GetActiveDutyCyclePercentage(), Units.Percentage
                 );
             Items.Add(DutyCyclePercentage);
-            command = new DelegateCommand<double>(this,
-                nameof(SetDutyCyclePercentage), "Set duty cycle",
-                p => SetDutyCyclePercentage(p),
+            Items.Add(new Command<double>(this,
+                nameof(SetDutyCyclePercentage), new IdentityInfo("Set duty cycle"),
+                (p, c) => SetDutyCyclePercentage(p),
                 p => CanSetDutyCyclePercentage(p),
-                parameters: new CommandPhysicalParameterInfo<double>(DutyCyclePercentage)
-                );
-            Items.Add(command);
+                parameters: new ValueInfo(DutyCyclePercentage)
+                ));
 
-            Polarity = new Property<PwmPulsePolarity>(this, nameof(Polarity), "Polarity", pin.Polarity);
+            Polarity = new Property<PwmPulsePolarity>(this, nameof(Polarity), new IdentityInfo("Polarity"), pin.Polarity);
             Items.Add(Polarity);
-            command = new DelegateCommand<PwmPulsePolarity>(this,
-                nameof(SetPolarity), "Set polarity",
-                p => SetPolarity(p),
-                parameters: new CommandParameterInfo<PwmPulsePolarity>(Polarity)
-                );
-            Items.Add(command);
+            Items.Add(new Command<PwmPulsePolarity>(this,
+                nameof(SetPolarity), new IdentityInfo("Set polarity"),
+                (p, c) => SetPolarity(p),
+                parameters: new ValueInfo(Polarity)
+                ));
         }
 
         public override bool IsAlive

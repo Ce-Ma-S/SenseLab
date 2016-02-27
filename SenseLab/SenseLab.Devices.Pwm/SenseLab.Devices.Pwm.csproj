@@ -123,6 +123,14 @@
       <Name>Windows IoT Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="SenseLab.Common">
+      <HintPath>..\..\artifacts\bin\SenseLab.Common\Debug\dotnet\SenseLab.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="CeMaS.Common">
+      <HintPath>..\..\artifacts\bin\CeMaS.Common\Debug\dotnet\CeMaS.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

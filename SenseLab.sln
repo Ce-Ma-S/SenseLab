@@ -22,6 +22,10 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SenseLab.Common", "SenseLab\SenseLab.Common\SenseLab.Common.xproj", "{ACEFFD32-D6A2-4564-A573-631F3D87CC45}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseLab.Devices.Pwm", "SenseLab\SenseLab.Devices.Pwm\SenseLab.Devices.Pwm.csproj", "{F1A72C88-EF75-43F6-968D-127D1750AC41}"
+	ProjectSection(ProjectDependencies) = postProject
+		{448CD917-A8FC-43E4-8D01-C154F21CBD90} = {448CD917-A8FC-43E4-8D01-C154F21CBD90}
+		{ACEFFD32-D6A2-4564-A573-631F3D87CC45} = {ACEFFD32-D6A2-4564-A573-631F3D87CC45}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

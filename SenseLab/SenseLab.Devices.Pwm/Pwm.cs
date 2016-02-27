@@ -1,8 +1,10 @@
-﻿using CeMaS.Common.Units;
+﻿using CeMaS.Common.Identity;
+using CeMaS.Common.Units;
 using CeMaS.Common.Validation;
 using SenseLab.Common.Commands;
 using SenseLab.Common.Objects;
 using SenseLab.Common.Properties;
+using SenseLab.Common.Values;
 using System.Linq;
 using Windows.Devices.Pwm;
 
@@ -20,44 +22,55 @@ namespace SenseLab.Devices.Pwm
             ) :
             base(
                 environment, id, info,
-                new ObjectType("PWM", "PWM", "Pulse width modulation"),
+                new ObjectType("PWM", new IdentityInfo("PWM", "Pulse width modulation")),
                 parent
                 )
         {
             controller.ValidateNonNull(nameof(controller));
             Controller = controller;
 
-            PinCount = new Property<int>(this, nameof(PinCount), "Pin count", Controller.PinCount);
+            PinCount = new Property<int>(this, nameof(PinCount), new IdentityInfo("Pin count"), Controller.PinCount);
             Items.Add(PinCount);
 
-            DelegateCommand command;
-            command = new DelegateCommand<int>(this,
-                nameof(OpenPin), "Open pin",
-                p => OpenPin(p),
+            Items.Add(new Command<int>(this,
+                nameof(OpenPin),
+                new IdentityInfo("Open pin"),
+                (p, c) => OpenPin(p),
                 p => CanOpenPin(p),
-                parameters: new CommandParameterInfo<int>("Number", "Number", "Pin number")
-                );
-            Items.Add(command);
+                parameters: "Number".ToValueInfo<int>(new IdentityInfo("Number", "Pin number"))
+                ));
 
             Frequency = new PhysicalProperty<double>(this,
-                nameof(Frequency), "Frequency", Controller.ActualFrequency, Units.Hertz);
+                nameof(Frequency),
+                new IdentityInfo("Frequency"),
+                Controller.ActualFrequency,
+                Units.Hertz
+                );
             Items.Add(Frequency);
 
             MinFrequency = new PhysicalProperty<double>(this,
-                nameof(MinFrequency), "Minimum frequency", Controller.MinFrequency, Units.Hertz);
+                nameof(MinFrequency),
+                new IdentityInfo("Minimum frequency"),
+                Controller.MinFrequency,
+                Units.Hertz
+                );
             Items.Add(MinFrequency);
 
             MaxFrequency = new PhysicalProperty<double>(this,
-                nameof(MaxFrequency), "Maximum frequency", Controller.MaxFrequency, Units.Hertz);
+                nameof(MaxFrequency),
+                new IdentityInfo("Maximum frequency"),
+                Controller.MaxFrequency,
+                Units.Hertz
+                );
             Items.Add(MaxFrequency);
 
-            command = new DelegateCommand<double>(this,
-                nameof(SetFrequency), "Set frequency",
-                p => SetFrequency(p),
+            Items.Add(new Command<double>(this,
+                nameof(SetFrequency),
+                new IdentityInfo("Set frequency"),
+                (p, c) => SetFrequency(p),
                 p => CanSetFrequency(p),
-                parameters: new CommandPhysicalParameterInfo<double>(Frequency)
-                );
-            Items.Add(command);
+                parameters: new ValueInfo(Frequency)
+                ));
         }
 
         public override bool IsAlive
@@ -75,7 +88,7 @@ namespace SenseLab.Devices.Pwm
         }
         public PwmPin OpenPin(int number)
         {
-            number.ValidateIn(0, PinCount.Value - 1, nameof(number));
+            number.ValidateBetween(0, PinCount.Value - 1, nameof(number));
             var pin = GetPin(number);
             if (pin == null)
             {

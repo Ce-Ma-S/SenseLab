@@ -1,9 +1,13 @@
-﻿using CeMaS.Common.Validation;
+﻿using CeMaS.Common.Identity;
+using CeMaS.Common.Units;
+using CeMaS.Common.Validation;
 using SenseLab.Common.Commands;
 using SenseLab.Common.Events;
 using SenseLab.Common.Properties;
+using SenseLab.Common.Values;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 
 namespace SenseLab.Common.Objects
 {
@@ -61,6 +65,14 @@ namespace SenseLab.Common.Objects
         {
             value.ValidateNonNull(nameof(value));
             return new ObjectItemInfo(value);
+        }
+        public static ValueInfo ToValueInfo<T>(this string id, IdentityInfo info)
+        {
+            return new ValueInfo(id, info, typeof(T));
+        }
+        public static PhysicalValueInfo ToValueInfo<T>(this string id, IdentityInfo info, Unit unit)
+        {
+            return new PhysicalValueInfo(id, info, typeof(T), unit);
         }
 
         #endregion
