@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{748F8B9C-C966-4E09-AEAB-09C741F119F4}"
+	ProjectSection(SolutionItems) = preProject
+		CeMaS.AssemblyInfo.cs = CeMaS.AssemblyInfo.cs
+		Common.AssemblyInfo.cs = Common.AssemblyInfo.cs
+		global.json = global.json
+		README.md = README.md
+		SenseLab.AssemblyInfo.cs = SenseLab.AssemblyInfo.cs
+		SenseLab.png = SenseLab.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SenseLab", "SenseLab", "{9C0A637C-BF38-48A7-9D9D-25A51D012830}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseLab.Devices.Pwm", "SenseLab\SenseLab.Devices.Pwm\SenseLab.Devices.Pwm.csproj", "{F1A72C88-EF75-43F6-968D-127D1750AC41}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Debug|ARM.ActiveCfg = Debug|ARM
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Debug|ARM.Build.0 = Debug|ARM
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Debug|x64.ActiveCfg = Debug|x64
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Debug|x64.Build.0 = Debug|x64
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Debug|x86.ActiveCfg = Debug|x86
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Debug|x86.Build.0 = Debug|x86
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Release|ARM.ActiveCfg = Release|ARM
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Release|ARM.Build.0 = Release|ARM
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Release|x64.ActiveCfg = Release|x64
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Release|x64.Build.0 = Release|x64
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Release|x86.ActiveCfg = Release|x86
+		{F1A72C88-EF75-43F6-968D-127D1750AC41}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F1A72C88-EF75-43F6-968D-127D1750AC41} = {9C0A637C-BF38-48A7-9D9D-25A51D012830}
+	EndGlobalSection
+EndGlobal

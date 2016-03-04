@@ -24,6 +24,6 @@
     "System.Threading": "4.0.10"
   },
   "scripts": {
-    "postpack": "if '%build:Configuration%'=='Release' nuget push \"%project:Directory%\\..\\..\\artifacts\\bin\\%project:Name%\\%build:Configuration%\\%project:Name%.%project:Version%.nupkg\""
+    "postpack": "xcopy /Y /I \"%project:Directory%\\..\\..\\..\\artifacts\\bin\\%project:Name%\\%build:Configuration%\\*.nupkg\" \"%project:Directory%\\..\\..\\..\\artifacts\\nuget\\%build:Configuration%\\\" "
   }
 }

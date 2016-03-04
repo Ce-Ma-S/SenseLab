@@ -123,18 +123,18 @@
       <Name>Windows IoT Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="SenseLab.Common">
-      <HintPath>..\..\artifacts\bin\SenseLab.Common\Debug\dotnet\SenseLab.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="CeMaS.Common">
-      <HintPath>..\..\artifacts\bin\CeMaS.Common\Debug\dotnet\CeMaS.Common.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>set TargetDir="$(SolutionDir)..\artifacts\bin\$(TargetName)\$(ConfigurationName)"
+set NugetDir="$(SolutionDir)..\artifacts\nuget\$(ConfigurationName)\"
+rd "%25TargetDir%25" /S /Q
+md "%25TargetDir%25"
+nuget pack "$(ProjectPath)" -OutputDirectory "%25TargetDir%25" -Properties Configuration=$(ConfigurationName) -Symbols
+xcopy /Y /I "%25TargetDir%25\*.nupkg" "%25NugetDir%25"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
