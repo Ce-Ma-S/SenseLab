@@ -3,10 +3,10 @@
 namespace CeMaS.Common.Identity
 {
     /// <summary>
-    /// Information about <see cref="IIdentity{T}"/>.
+    /// Information about <see cref="IIdentity{T}"/> to be presented in UI etc.
     /// </summary>
     public interface IIdentityInfo :
-        IHaveMetadata
+        IHaveNamedValues
     {
         /// <summary>
         /// Name.

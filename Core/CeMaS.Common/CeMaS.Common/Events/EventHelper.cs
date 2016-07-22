@@ -62,6 +62,19 @@ namespace CeMaS.Common.Events
             }
             return result;
         }
+        public static PropertyChangingEventArgs RaiseEvent(
+            this PropertyChangingEventHandler handler,
+            object sender,
+            string propertyName
+            )
+        {
+            PropertyChangingEventArgs a = null;
+            handler?.Invoke(
+                sender,
+                a = new PropertyChangingEventArgs(propertyName)
+                );
+            return a;
+        }
         public static PropertyChangedEventArgs RaiseEvent(
             this PropertyChangedEventHandler handler,
             object sender,
@@ -69,13 +82,10 @@ namespace CeMaS.Common.Events
             )
         {
             PropertyChangedEventArgs a = null;
-            if (handler != null)
-            {
-                handler(
-                    sender,
-                    a = new PropertyChangedEventArgs(propertyName)
-                    );
-            }
+            handler?.Invoke(
+                sender,
+                a = new PropertyChangedEventArgs(propertyName)
+                );
             return a;
         }
 

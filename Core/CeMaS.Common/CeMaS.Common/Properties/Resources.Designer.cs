@@ -22,7 +22,7 @@ namespace CeMaS.Common.Properties {
     // with the /str option, or rebuild your VS project.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -35,7 +35,7 @@ namespace CeMaS.Common.Properties {
         ///    Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CeMaS.Common.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
@@ -50,7 +50,7 @@ namespace CeMaS.Common.Properties {
         ///    resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -62,7 +62,7 @@ namespace CeMaS.Common.Properties {
         /// <summary>
         ///    Looks up a localized string similar to Hertz.
         /// </summary>
-        internal static string Hertz_Name {
+        public static string Hertz_Name {
             get {
                 return ResourceManager.GetString("Hertz_Name", resourceCulture);
             }
@@ -71,9 +71,18 @@ namespace CeMaS.Common.Properties {
         /// <summary>
         ///    Looks up a localized string similar to Percentage.
         /// </summary>
-        internal static string Percentage_Name {
+        public static string Percentage_Name {
             get {
                 return ResourceManager.GetString("Percentage_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Value is required.
+        /// </summary>
+        public static string Validation_Required {
+            get {
+                return ResourceManager.GetString("Validation_Required", resourceCulture);
             }
         }
     }

@@ -1,5 +1,4 @@
-﻿using CeMaS.Common.Properties;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CeMaS.Common.State
 {
@@ -16,6 +15,6 @@ namespace CeMaS.Common.State
         /// <exception cref="System.ArgumentNullException"><paramref name="state"/> is null.</exception>
         /// <exception cref="System.ArgumentException"><paramref name="state"/> is invalid.</exception>
         /// <value>Whether object`s state has been changed.</value>
-        Task<bool> SetState(IMetadata state);
+        bool SetState(IReadOnlyDictionary<string, object> state);
     }
 }

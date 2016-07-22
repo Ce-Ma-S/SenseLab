@@ -1,4 +1,4 @@
-﻿using CeMaS.Common.Identity;
+﻿using System.Collections.Generic;
 
 namespace SenseLab.Common.Objects
 {
@@ -9,9 +9,11 @@ namespace SenseLab.Common.Objects
         public ObjectItem(
             Object @object,
             string id,
-            IdentityInfo info
+            string name,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            base(@object, id, info)
+            base(@object, id, name, description, values)
         { }
 
         public new Object Object

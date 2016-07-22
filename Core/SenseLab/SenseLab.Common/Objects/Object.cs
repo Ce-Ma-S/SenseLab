@@ -15,11 +15,13 @@ namespace SenseLab.Common.Objects
         public Object(
             ObjectEnvironment environment,
             string id,
-            IdentityInfo info,
+            string name,
             ObjectType type,
+            string description = null,
+            IDictionary<string, object> values = null,
             Object parent = null
             ) :
-            base(environment, id, info, type, parent)
+            base(environment, id, name, type, description, values, parent)
         {
         }
 

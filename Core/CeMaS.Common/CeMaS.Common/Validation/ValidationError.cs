@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CeMaS.Common.Validation
 {
@@ -7,6 +8,8 @@ namespace CeMaS.Common.Validation
     /// </summary>
     public class ValidationError
     {
+        #region Init
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -16,15 +19,35 @@ namespace CeMaS.Common.Validation
         /// <exception cref="ArgumentNullException"><paramref name="message"/> is null or empty.</exception>
         public ValidationError(
             string message,
-            IValidationScope scope = null,
+            ValidationScope scope = null,
             Exception error = null
             )
         {
-            message.ValidateNonNullOrEmpty(nameof(message));
+            Argument.NonNullOrEmpty(message, nameof(message));
             Message = message;
-            Scope = scope;
+            SetScope(scope);
             Error = error;
         }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="error"><see cref="Error"/></param>
+        /// <param name="scope"><see cref="Scope"/></param>
+        /// <exception cref="ArgumentNullException"><paramref name="error"/> is null.</exception>
+        public ValidationError(
+            Exception error,
+            ValidationScope scope = null
+            ) :
+            this(error.Message(), scope, error)
+        { }
+
+        #endregion
+
+        /// <summary>
+        /// Represents <see cref="IValidator{T}.Validate(T)"/> result for valid values.
+        /// </summary>
+        public static IEnumerable<ValidationError> None = Array.Empty<ValidationError>();
 
         /// <summary>
         /// Display message.
@@ -32,10 +55,13 @@ namespace CeMaS.Common.Validation
         /// <value>non-empty</value>
         public string Message { get; }
         /// <summary>
-        /// Optional validation scope.
+        /// Validation scope.
         /// </summary>
-        /// <value>null means whole validated value.</value>
-        public IValidationScope Scope { get; }
+        /// <value>non-null</value>
+        public ValidationScope Scope
+        {
+            get { return scope ?? ValidationScope.Whole; }
+        }
         /// <summary>
         /// Optional error.
         /// </summary>
@@ -43,9 +69,16 @@ namespace CeMaS.Common.Validation
 
         public override string ToString()
         {
-            return Scope == null ?
+            return Scope == ValidationScope.Whole ?
                 Message :
-                $"{Scope}: {Message}";
+                $"{Scope.Info.Name}:{Environment.NewLine}{Message}";
         }
+        public ValidationError SetScope(ValidationScope scope)
+        {
+            this.scope = scope;
+            return this;
+        }
+
+        private ValidationScope scope;
     }
 }

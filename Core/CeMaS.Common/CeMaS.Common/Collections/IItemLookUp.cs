@@ -1,4 +1,6 @@
-﻿namespace CeMaS.Common.Collections
+﻿using System.Collections.Generic;
+
+namespace CeMaS.Common.Collections
 {
     /// <summary>
     /// Provides access to identifiable items.
@@ -7,6 +9,10 @@
     /// <typeparam name="TId">Item identifier type.</typeparam>
     public interface IItemLookUp<TId, TItem>
     {
+        /// <summary>
+        /// Identifiers of available items.
+        /// </summary>
+        IEnumerable<TId> Ids { get; }
         /// <summary>
         /// Finds an item with <paramref name="id"/>.
         /// </summary>

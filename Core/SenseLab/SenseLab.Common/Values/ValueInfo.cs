@@ -1,6 +1,8 @@
-﻿using CeMaS.Common.Identity;
+﻿using CeMaS.Common.Collections;
+using CeMaS.Common.Identity;
 using CeMaS.Common.Validation;
 using System;
+using System.Collections.Generic;
 
 namespace SenseLab.Common.Values
 {
@@ -12,12 +14,14 @@ namespace SenseLab.Common.Values
 
         public ValueInfo(
             string id,
-            IdentityInfo info,
-            Type type
+            string name,
+            Type type,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            base(id, info)
+            base(id, name, description, values)
         {
-            type.ValidateNonNull(nameof(type));
+            Argument.NonNull(type, nameof(type));
             Type = type;
         }
 
@@ -26,8 +30,10 @@ namespace SenseLab.Common.Values
             ) :
             this(
                 value.Id,
-                (IdentityInfo)value.Info,
-                value.Type
+                value.Name,
+                value.Type,
+                value.Description,
+                value.Values.ToDictionary()
                 )
         { }
 

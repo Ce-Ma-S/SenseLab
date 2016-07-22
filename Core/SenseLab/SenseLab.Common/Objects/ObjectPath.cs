@@ -9,14 +9,14 @@ namespace SenseLab.Common.Objects
 
         public static string Join(params string[] paths)
         {
-            paths.ValidateNonNull(nameof(paths));
+            Argument.NonNull(paths, nameof(paths));
             for (int i = 0; i < paths.Length; i++)
-                paths[i].ValidateNonNullOrEmpty(string.Format($"{nameof(paths)}[{i}]"));
+                Argument.NonNullOrEmpty(paths[i], string.Format($"{nameof(paths)}[{i}]"));
             return string.Join(Separator, paths);
         }
         public static string[] Split(string path)
         {
-            path.ValidateNonNull(nameof(path));
+            Argument.NonNull(path, nameof(path));
             return path.Split(separators, StringSplitOptions.RemoveEmptyEntries);
         }
 

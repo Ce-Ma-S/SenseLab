@@ -62,13 +62,18 @@ namespace CeMaS.Common.Commands
         }
         bool ICommand.CanExecute(object parameter)
         {
-            return
-                (
-                    parameter == null &&
-                    parameterAllowsNull ||
-                    parameter is TParameter
-                ) &&
-                CanExecute((TParameter)parameter);
+            TParameter p;
+            if (parameter == null)
+            {
+                p = default(TParameter);
+            }
+            else
+            {
+                if (!parameter.Is<TParameter>())
+                    return false;
+                p = (TParameter)parameter;
+            }
+            return CanExecute(p);
         }
         public Task NotifyCanExecuteChanged(params TParameter[] parameters)
         {
@@ -105,10 +110,13 @@ namespace CeMaS.Common.Commands
                 new Task<TResult>(() => Execute(parameter, cancellation)) :
                 ExecuteAsync(parameter, cancellation);
         }
-
         async Task<object> ICommand.Execute(object parameter)
         {
-            return await Execute((TParameter)parameter);
+            return await Execute(
+                parameter == null ?
+                    default(TParameter) :
+                    (TParameter)parameter
+                );
         }
 
         protected abstract bool GetAllowsParallelExecution();
@@ -227,8 +235,6 @@ namespace CeMaS.Common.Commands
         protected readonly ILogger Log;
 
         #endregion
-
-        private static readonly bool parameterAllowsNull = typeof(TParameter).AllowsNull();
 
         private int executionCount;
     }

@@ -5,14 +5,18 @@
     "CeMaS, Czech and Slovak Republic",
     "Marek Ištvánek"
   ],
-  "tags": [ "SenseLab common environment property command event object record" ],
-  "projectUrl": "http://ce-ma-s.net/en/projekty/software/senselab/",
-  "licenseUrl": "",
+  "packOptions": {
+    "tags": [ "SenseLab common environment property command event object record" ],
+    "projectUrl": "http://ce-ma-s.net/en/projekty/software/senselab/"
+  },
   "frameworks": {
-    "dotnet": { }
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
   },
   "dependencies": {
-    "CeMaS.Common": ""
+    "NETStandard.Library": "1.6.0",
+    "CeMaS.Common": "1.0.0-*"
   },
   "scripts": {
     "postpack": "xcopy /Y /I \"%project:Directory%\\..\\..\\..\\artifacts\\bin\\%project:Name%\\%build:Configuration%\\*.nupkg\" \"%project:Directory%\\..\\..\\..\\artifacts\\nuget\\%build:Configuration%\\\" "

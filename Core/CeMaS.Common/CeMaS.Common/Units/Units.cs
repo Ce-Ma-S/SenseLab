@@ -4,7 +4,7 @@ namespace CeMaS.Common.Units
 {
     public static class Units
     {
-        public static readonly Unit Percentage = new Unit("Percentage", "%", Resources.Percentage_Name);
-        public static readonly Unit Hertz = new Unit("Hertz", "Hz", Resources.Hertz_Name);
+        public static readonly Unit<string> Percentage = new Unit<string>(nameof(Percentage), Resources.Percentage_Name, "%");
+        public static readonly Unit<string> Hertz = new Unit<string>(nameof(Hertz), Resources.Hertz_Name, "Hz");
     }
 }

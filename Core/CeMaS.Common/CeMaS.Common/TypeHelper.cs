@@ -22,18 +22,35 @@ namespace CeMaS.Common
         {
             return type.Is(typeof(T));
         }
-        public static bool Is(this object item, Type requiredType)
+        public static bool Is<T>(
+            this object item,
+            bool allowNullIfNullable = false
+            )
+        {
+            return item.Is(typeof(T), allowNullIfNullable);
+        }
+        public static bool Is(
+            this object item,
+            Type requiredType,
+            bool allowNullIfNullable = false
+            )
         {
             return
+                allowNullIfNullable &&
+                item == null &&
+                requiredType.IsNullable() ||
                 item != null &&
                 item.GetType().Is(requiredType);
         }
-        public static bool IsValidFor(this object item, Type type)
+        public static bool IsTypeOf(
+            this object item,
+            object itemOfRequiredType,
+            bool allowNullIfNullable = false
+            )
         {
             return
-                item == null &&
-                type.AllowsNull() ||
-                item.Is(type);
+                itemOfRequiredType != null &&
+                item.Is(itemOfRequiredType.GetType(), allowNullIfNullable);
         }
         public static bool FirstIsSecond<T1, T2>()
         {
@@ -47,19 +64,12 @@ namespace CeMaS.Common
         {
             return Nullable.GetUnderlyingType(type) != null;
         }
-        public static bool AllowsNull(this Type type)
+        public static bool IsNullable(this Type type)
         {
-            type.ValidateNonNull(nameof(type));
+            Validate(type);
             return
                 !type.IsValueType() ||
                 type.IsNullableValueType();
-        }
-
-        public static bool IsNull<T>(this T item)
-        {
-            return
-                typeof(T).AllowsNull() &&
-                (object)item == null;
         }
 
         #region Member
@@ -67,7 +77,7 @@ namespace CeMaS.Common
         public static T Attribute<T>(this MemberInfo memberInfo)
             where T : Attribute
         {
-            return (T)memberInfo.GetCustomAttributes(typeof(T), true).FirstOrDefault();
+            return (T)memberInfo.GetCustomAttribute(typeof(T), true);
         }
 
         #endregion
@@ -76,14 +86,14 @@ namespace CeMaS.Common
 
         public static bool IsReadable(this PropertyInfo propertyInfo, bool @public = true)
         {
-            propertyInfo.ValidateNonNull("propertyInfo");
+            Argument.NonNull(propertyInfo, nameof(propertyInfo));
             return
                 propertyInfo.CanRead &&
                 propertyInfo.GetGetMethod(!@public) != null;
         }
         public static bool IsWritable(this PropertyInfo propertyInfo, bool @public = true)
         {
-            propertyInfo.ValidateNonNull("propertyInfo");
+            Argument.NonNull(propertyInfo, nameof(propertyInfo));
             return
                 propertyInfo.CanWrite &&
                 propertyInfo.GetSetMethod(!@public) != null;
@@ -125,7 +135,7 @@ namespace CeMaS.Common
 
         public static string Name(this Type type, bool excludeGenericPart)
         {
-            type.ValidateNonNull("type");
+            Validate(type);
             string name = type.Name;
             if (excludeGenericPart)
             {
@@ -144,7 +154,7 @@ namespace CeMaS.Common
             bool includeObjectBase = true
             )
         {
-            type.ValidateNonNull("type");
+            Argument.NonNull(type, nameof(type));
             if (includeThis)
                 yield return type;
             var baseType = type;
@@ -158,6 +168,18 @@ namespace CeMaS.Common
                 foreach (var interfaceType in type.GetInterfaces())
                     yield return interfaceType;
             }
+        }
+
+        public static T Attribute<T>(this Type type)
+            where T : Attribute
+        {
+            return type.GetTypeInfo().Attribute<T>();
+        }
+
+
+        private static void Validate(Type type)
+        {
+            Argument.NonNull(type, nameof(type));
         }
     }
 }

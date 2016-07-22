@@ -23,7 +23,7 @@ namespace CeMaS.Common.Diagnostics
             Action<object, TimeSpan> onStop
             )
         {
-            onStop.ValidateNonNull(nameof(onStop));
+            Argument.NonNull(onStop, nameof(onStop));
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             object state = onStart == null ?
@@ -48,7 +48,7 @@ namespace CeMaS.Common.Diagnostics
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
         public static TimeSpan RunAndMeasureTime(this Action action)
         {
-            action.ValidateNonNull(nameof(action));
+            Argument.NonNull(action, nameof(action));
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             action();
@@ -71,12 +71,12 @@ namespace CeMaS.Common.Diagnostics
             bool parallel
             )
         {
-            repeatCount.ValidatePositive(nameof(repeatCount));
+            Argument.Positive(repeatCount, nameof(repeatCount));
             if (repeatCount == 1)
                 return new[] { action.RunAndMeasureTime() };
             if (parallel)
             {
-                action.ValidateNonNull(nameof(action));
+                Argument.NonNull(action, nameof(action));
                 return Enumerable.Range(1, repeatCount).
                     AsParallel().
                     Select(i => action.RunAndMeasureTime()).

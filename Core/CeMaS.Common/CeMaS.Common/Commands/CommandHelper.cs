@@ -11,7 +11,7 @@ namespace CeMaS.Common.Commands
             TParameter parameter
             )
         {
-            command.ValidateNonNull(nameof(command));
+            Argument.NonNull(command, nameof(command));
             var result = Optional<TResult>.None;
             if (command.CanExecute(parameter))
                 result = new Optional<TResult>(await command.Execute(parameter));
@@ -23,6 +23,13 @@ namespace CeMaS.Common.Commands
             )
         {
             return command.ExecuteIfPossible(Unit.Default);
+        }
+
+        public static async Task<bool> ExecuteIfPossible<TResult>(
+            this ICommand<Unit, Unit> command
+            )
+        {
+            return (await command.ExecuteIfPossible(Unit.Default)).HasValue;
         }
     }
 }

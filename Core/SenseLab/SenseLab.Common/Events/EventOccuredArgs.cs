@@ -8,7 +8,7 @@ namespace SenseLab.Common.Events
     {
         public EventOccuredArgs(params object[] arguments)
         {
-            arguments.ValidateNonNull(nameof(arguments));
+            Argument.NonNull(arguments, nameof(arguments));
             Arguments = arguments;
         }
 

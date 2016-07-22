@@ -1,4 +1,6 @@
-﻿using CeMaS.Common.Identity;
+﻿using CeMaS.Common.Collections;
+using CeMaS.Common.Identity;
+using System.Collections.Generic;
 
 namespace SenseLab.Common.Objects
 {
@@ -8,15 +10,19 @@ namespace SenseLab.Common.Objects
     {
         public ObjectType(
             string id,
-            IdentityInfo info
+            string name,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            base(id, info)
+            base(id, name, description, values)
         { }
 
         public ObjectType(IObjectType value) :
             this(
                 value.Id,
-                (IdentityInfo)value.Info
+                value.Name,
+                value.Description,
+                value.Values.ToDictionary()
                 )
         {
         }

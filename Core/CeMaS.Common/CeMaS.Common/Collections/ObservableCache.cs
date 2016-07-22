@@ -26,8 +26,8 @@ namespace CeMaS.Common.Collections
             IScheduler scheduler = null
             )
         {
-            observable.ValidateNonNull("observable");
-            cacheSize.ValidatePositive("cacheSize");
+            Argument.NonNull(observable, nameof(observable));
+            Argument.Positive(cacheSize, nameof(cacheSize));
 
             Observable = observable;
             CacheSize = cacheSize;

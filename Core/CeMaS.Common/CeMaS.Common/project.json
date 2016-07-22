@@ -1,27 +1,28 @@
-﻿{
+{
   "version": "1.0.0-beta3",
   "description": "Common functionality",
   "authors": [
     "CeMaS, Czech and Slovak Republic",
     "Marek Ištvánek"
   ],
-  "tags": [ "common metadata collection command event log state unit validation" ],
-  "projectUrl": "http://ce-ma-s.net/en/",
-  "licenseUrl": "",
+  "packOptions": {
+    "tags": [ "common metadata collection command event log state unit validation" ],
+    "projectUrl": "http://ce-ma-s.net/en/"
+  },
   "frameworks": {
-    "dotnet": { }
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
   },
   "dependencies": {
-    "Microsoft.CSharp": "4.0.0",
-    "Rx-Main": "2.2.5",
-    "Serilog": "1.5.14",
-    "System.ComponentModel": "4.0.0",
-    "System.Linq": "4.0.0",
-    "System.Linq.Parallel": "4.0.0",
-    "System.ObjectModel": "4.0.10",
-    "System.Runtime": "4.0.20",
-    "System.Runtime.Serialization.Primitives": "4.0.10",
-    "System.Threading": "4.0.10"
+    "NETStandard.Library": "1.6.0",
+    "Serilog": "2.0.0",
+    "System.ComponentModel.Annotations": "4.1.0",
+    "System.Interactive.Async": "3.0.0",
+    "System.Linq.Parallel": "4.0.1",
+    "System.Reactive": "3.0.0",
+    "System.Reflection.TypeExtensions": "4.1.0",
+    "System.Runtime.Serialization.Primitives": "4.1.1"
   },
   "scripts": {
     "postpack": "xcopy /Y /I \"%project:Directory%\\..\\..\\..\\artifacts\\bin\\%project:Name%\\%build:Configuration%\\*.nupkg\" \"%project:Directory%\\..\\..\\..\\artifacts\\nuget\\%build:Configuration%\\\" "

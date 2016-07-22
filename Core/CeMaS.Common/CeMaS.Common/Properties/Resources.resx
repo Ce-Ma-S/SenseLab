@@ -123,4 +123,7 @@
   <data name="Percentage_Name" xml:space="preserve">
     <value>Percentage</value>
   </data>
+  <data name="Validation_Required" xml:space="preserve">
+    <value>Value is required</value>
+  </data>
 </root>

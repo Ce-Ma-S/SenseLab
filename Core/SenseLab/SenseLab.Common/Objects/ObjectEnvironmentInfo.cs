@@ -1,5 +1,7 @@
-﻿using CeMaS.Common.Identity;
+﻿using CeMaS.Common.Collections;
+using CeMaS.Common.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace SenseLab.Common.Objects
 {
@@ -7,14 +9,20 @@ namespace SenseLab.Common.Objects
         Identity<Guid>,
         IObjectEnvironmentInfo
     {
-        public ObjectEnvironmentInfo(Guid id, IdentityInfo info) :
-            base(id, info)
-        {
-        }
+        public ObjectEnvironmentInfo(
+            Guid id,
+            string name,
+            string description = null,
+            IDictionary<string, object> values = null
+            ) :
+            base(id, name, description, values)
+        { }
         public ObjectEnvironmentInfo(IObjectEnvironmentInfo value) :
             this(
                 value.Id,
-                (IdentityInfo)value.Info
+                value.Name,
+                value.Description,
+                value.Values.ToDictionary()
                 )
         { }
     }

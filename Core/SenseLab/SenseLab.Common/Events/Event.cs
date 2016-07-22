@@ -1,5 +1,4 @@
 ﻿using CeMaS.Common.Events;
-using CeMaS.Common.Identity;
 using CeMaS.Common.Validation;
 using SenseLab.Common.Objects;
 using SenseLab.Common.Values;
@@ -14,10 +13,12 @@ namespace SenseLab.Common.Events
         public Event(
             Object @object,
             string id,
-            IdentityInfo info,
-            params ValueInfo[] arguments
+            string name,
+            IEnumerable<ValueInfo> arguments = null,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            base(@object, id, info)
+            base(@object, id, name, description, values)
         {
             Arguments = new List<ValueInfo>(arguments);
         }
@@ -32,7 +33,7 @@ namespace SenseLab.Common.Events
 
         public virtual void OnOccured(params object[] arguments)
         {
-            arguments.ValidateCount(Arguments.Count, nameof(arguments));
+            Argument.Count(arguments, Arguments.Count, nameof(arguments));
             Occured.RaiseEvent(this, new EventOccuredArgs(arguments));
         }
     }

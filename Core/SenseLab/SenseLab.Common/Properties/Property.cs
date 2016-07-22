@@ -1,6 +1,6 @@
 ﻿using CeMaS.Common.Events;
-using CeMaS.Common.Identity;
 using SenseLab.Common.Objects;
+using System.Collections.Generic;
 
 namespace SenseLab.Common.Properties
 {
@@ -13,18 +13,22 @@ namespace SenseLab.Common.Properties
         public Property(
             Object @object,
             string id,
-            IdentityInfo info
+            string name,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            base(@object, id, info)
+            base(@object, id, name, description, values)
         { }
 
         public Property(
             Object @object,
             string id,
-            IdentityInfo info,
-            T value
+            string name,
+            T value,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            base(@object, id, info)
+            base(@object, id, name, description, values)
         {
             Value = value;
         }
@@ -63,7 +67,7 @@ namespace SenseLab.Common.Properties
         }
 
         public event System.EventHandler<ValueChangeEventArgs<T>> ValueChanged;
-        event System.EventHandler<ValueChangeEventArgs> IProperty.ValueChanged
+        event System.EventHandler<ValueChangeEventArgs<object>> IProperty.ValueChanged
         {
             add
             {
@@ -79,15 +83,13 @@ namespace SenseLab.Common.Properties
         {
             if (hasOldValue)
             {
-                var a = new ValueChangeEventArgs<T>(oldValue, newValue);
-                ValueChanged.RaiseEvent(this, a);
-                valueChangedUntyped.RaiseEvent(this, a);
+                ValueChanged.RaiseEvent(this, new ValueChangeEventArgs<T>(oldValue, newValue));
+                valueChangedUntyped.RaiseEvent(this, new ValueChangeEventArgs<object>(oldValue, newValue));
             }
             else
             {
-                var a = new ValueChangeEventArgs<T>(newValue, true);
-                ValueChanged.RaiseEvent(this, a);
-                valueChangedUntyped.RaiseEvent(this, a);
+                ValueChanged.RaiseEvent(this, new ValueChangeEventArgs<T>(newValue, true));
+                valueChangedUntyped.RaiseEvent(this, new ValueChangeEventArgs<object>(newValue, true));
             }
         }
 
@@ -99,6 +101,6 @@ namespace SenseLab.Common.Properties
         }
 
         private T value;
-        private event System.EventHandler<ValueChangeEventArgs> valueChangedUntyped;
+        private event System.EventHandler<ValueChangeEventArgs<object>> valueChangedUntyped;
     }
 }

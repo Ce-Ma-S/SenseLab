@@ -1,7 +1,7 @@
-﻿using CeMaS.Common.Identity;
-using CeMaS.Common.Units;
+﻿using CeMaS.Common.Units;
 using CeMaS.Common.Validation;
 using SenseLab.Common.Objects;
+using System.Collections.Generic;
 
 namespace SenseLab.Common.Properties
 {
@@ -14,10 +14,12 @@ namespace SenseLab.Common.Properties
         public PhysicalProperty(
             Object @object,
             string id,
-            IdentityInfo info,
-            Unit unit
+            string name,
+            Unit<string> unit,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            base(@object, id, info)
+            base(@object, id, name, description, values)
         {
             Unit = unit;
         }
@@ -25,27 +27,29 @@ namespace SenseLab.Common.Properties
         public PhysicalProperty(
             Object @object,
             string id,
-            IdentityInfo info,
+            string name,
             T value,
-            Unit unit
+            Unit<string> unit,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            base(@object, id, info, value)
+            base(@object, id, name, value, description, values)
         {
             Unit = unit;
         }
 
         #endregion
 
-        public Unit Unit
+        public Unit<string> Unit
         {
             get { return unit; }
             set
             {
-                value.ValidateNonNull();
+                Argument.NonNull(value);
                 SetPropertyValue(ref unit, value);
             }
         }
 
-        private Unit unit;
+        private Unit<string> unit;
     }
 }

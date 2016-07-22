@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace CeMaS.Common.Collections
 {
@@ -21,6 +19,11 @@ namespace CeMaS.Common.Collections
         }
 
         #endregion
+
+        public IEnumerable<TId> Ids
+        {
+            get { return Keys; }
+        }
 
         public TItem GetItem(TId id)
         {

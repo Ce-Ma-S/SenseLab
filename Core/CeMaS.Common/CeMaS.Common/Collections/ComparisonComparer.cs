@@ -19,7 +19,7 @@ namespace CeMaS.Common.Collections
         /// <exception cref="ArgumentNullException"><paramref name="comparison"/> is null.</exception>
         public ComparisonComparer(Comparison<T> comparison)
         {
-            comparison.ValidateNonNull("comparison");
+            Argument.NonNull(comparison, nameof(comparison));
             Comparison = comparison;
         }
 

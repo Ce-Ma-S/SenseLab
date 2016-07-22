@@ -1,5 +1,7 @@
-﻿using CeMaS.Common.Identity;
+﻿using CeMaS.Common.Collections;
+using CeMaS.Common.Identity;
 using CeMaS.Common.Validation;
+using System.Collections.Generic;
 
 namespace SenseLab.Common.Objects
 {
@@ -12,14 +14,16 @@ namespace SenseLab.Common.Objects
         public ObjectInfo(
             ObjectEnvironmentInfo environment,
             string id,
-            IdentityInfo info,
+            string name,
             ObjectType type,
+            string description = null,
+            IDictionary<string, object> values = null,
             ObjectInfo parent = null
             ) :
-            base(id, info)
+            base(id, name, description, values)
         {
-            type.ValidateNonNull(nameof(type));
-            environment.ValidateNonNull(nameof(environment));
+            Argument.NonNull(type, nameof(type));
+            Argument.NonNull(environment, nameof(environment));
             Type = type;
             Environment = environment;
             Parent = parent;
@@ -29,8 +33,10 @@ namespace SenseLab.Common.Objects
             this(
                 new ObjectEnvironmentInfo(value.Environment),
                 value.Id,
-                (IdentityInfo)value.Info,
+                value.Name,
                 (ObjectType)value.Type,
+                value.Description,
+                value.Values.ToDictionary(),
                 value.Parent == null ?
                     null :
                     new ObjectInfo(value.Parent)

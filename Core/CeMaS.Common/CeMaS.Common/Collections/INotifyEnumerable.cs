@@ -8,14 +8,13 @@ namespace CeMaS.Common.Collections
     /// <typeparam name="T">Item type.</typeparam>
     public interface INotifyEnumerable<out T> :
         IEnumerable<T>,
-        INotifyCollectionChange<T>
-    {
-    }
+        INotifyCollectionChanging<T>,
+        INotifyCollectionChanged<T>
+    { }
 
 
     public interface INotifyEnumerable<TId, TItem> :
         INotifyEnumerable<TItem>,
         IItemLookUp<TId, TItem>
-    {
-    }
+    { }
 }

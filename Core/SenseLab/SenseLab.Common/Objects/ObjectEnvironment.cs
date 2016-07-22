@@ -1,5 +1,4 @@
 ﻿using CeMaS.Common.Events;
-using CeMaS.Common.Identity;
 using System;
 using System.Collections.Generic;
 
@@ -11,9 +10,11 @@ namespace SenseLab.Common.Objects
     {
         public ObjectEnvironment(
             Guid id,
-            IdentityInfo info
+            string name,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            base(id, info)
+            base(id, name, description, values)
         { }
 
         #region IsAlive

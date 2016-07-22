@@ -12,9 +12,17 @@ namespace CeMaS.Common.Collections
         {
         }
 
+        public IObservable<IEnumerable<T>> Adding
+        {
+            get { return ((ObservableCollection<T>)Items).Adding; }
+        }
         public IObservable<IEnumerable<T>> Added
         {
             get { return ((ObservableCollection<T>)Items).Added; }
+        }
+        public IObservable<IEnumerable<T>> Removing
+        {
+            get { return ((ObservableCollection<T>)Items).Removing; }
         }
         public IObservable<IEnumerable<T>> Removed
         {

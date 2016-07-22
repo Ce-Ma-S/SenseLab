@@ -11,7 +11,7 @@ namespace SenseLab.Common.Properties
     {
         bool HasValue { get; }
         object Value { get; }
-        event EventHandler<ValueChangeEventArgs> ValueChanged;
+        event EventHandler<ValueChangeEventArgs<object>> ValueChanged;
     }
 
 

@@ -16,12 +16,13 @@ namespace CeMaS.Common.Disposing
         /// <exception cref="ArgumentNullException"><paramref name="dispose"/> is null.</exception>
         public DelegateDisposable(Action<bool> dispose)
         {
-            dispose.ValidateNonNull(nameof(dispose));
+            Argument.NonNull(dispose, nameof(dispose));
             this.dispose = dispose;
         }
 
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
             dispose(disposing);
         }
 

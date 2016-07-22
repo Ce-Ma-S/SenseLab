@@ -20,15 +20,17 @@ namespace SenseLab.Common.Commands
         public Command(
             Objects.Object @object,
             string id,
-            IdentityInfo info,
+            string name,
             Func<TParameter, CancellationTokenSource, TResult> execute,
             IEnumerable<ValueInfo> parameters = null,
             IEnumerable<ValueInfo> results = null,
             Func<TParameter, bool> canExecute = null,
             bool isSynchronous = true,
-            bool allowsParallelExecution = false
+            bool allowsParallelExecution = false,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            this(@object, id, info, parameters, results)
+            this(@object, id, name, parameters, results, description, values)
         {
             Value = new DelegateCommand<object[], object[]>(
                 (p, c) => ToResult(execute(ToParameter(p), c)),
@@ -41,14 +43,16 @@ namespace SenseLab.Common.Commands
         public Command(
             Objects.Object @object,
             string id,
-            IdentityInfo info,
+            string name,
             Func<TParameter, CancellationTokenSource, Task<TResult>> executeTaskFactory,
             IEnumerable<ValueInfo> parameters = null,
             IEnumerable<ValueInfo> results = null,
             Func<TParameter, bool> canExecute = null,
-            bool allowsParallelExecution = false
+            bool allowsParallelExecution = false,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            this(@object, id, info, parameters, results)
+            this(@object, id, name, parameters, results, description, values)
         {
             Value = new DelegateCommand<object[], object[]>(
                 async (p, c) => ToResult(await executeTaskFactory(ToParameter(p), c)),
@@ -60,11 +64,13 @@ namespace SenseLab.Common.Commands
         private Command(
             Objects.Object @object,
             string id,
-            IdentityInfo info,
+            string name,
             IEnumerable<ValueInfo> parameters,
-            IEnumerable<ValueInfo> results
+            IEnumerable<ValueInfo> results,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            base(@object, id, info)
+            base(@object, id, name, description, values)
         {
             Parameters = parameters == null ?
                 new List<ValueInfo>() :
@@ -167,7 +173,7 @@ namespace SenseLab.Common.Commands
             {
                 var parameterInfo = parameterInfos[i];
                 var parameter = parameters[i];
-                if (!parameter.IsValidFor(parameterInfo.Type))
+                if (!parameter.Is(parameterInfo.Type))
                     return false;
             }
             return true;
@@ -181,45 +187,51 @@ namespace SenseLab.Common.Commands
         #region Init
 
         public Command(
-                Objects.Object @object,
-                string id,
-                IdentityInfo info,
-                Action<TParameter, CancellationTokenSource> execute,
-                Func<TParameter, bool> canExecute = null,
-                bool isSynchronous = true,
-                bool allowsParallelExecution = false,
-                params ValueInfo[] parameters
-                ) :
-                base(
-                    @object,
-                    id,
-                    info,
-                    (p, c) =>
-                    {
-                        execute(p, c);
-                        return Unit.Default;
-                    },
-                    parameters,
-                    null,
-                    canExecute,
-                    isSynchronous,
-                    allowsParallelExecution
-                    )
+            Objects.Object @object,
+            string id,
+            string name,
+            Action<TParameter, CancellationTokenSource> execute,
+            IEnumerable<ValueInfo> parameters = null,
+            Func<TParameter, bool> canExecute = null,
+            bool isSynchronous = true,
+            bool allowsParallelExecution = false,
+            string description = null,
+            IDictionary<string, object> values = null
+            ) :
+            base(
+                @object,
+                id,
+                name,
+                (p, c) =>
+                {
+                    execute(p, c);
+                    return Unit.Default;
+                },
+                parameters,
+                null,
+                canExecute,
+                isSynchronous,
+                allowsParallelExecution,
+                description,
+                values
+                )
         { }
 
         public Command(
             Objects.Object @object,
             string id,
-            IdentityInfo info,
+            string name,
             Func<TParameter, CancellationTokenSource, Task> executeTaskFactory,
+            IEnumerable<ValueInfo> parameters = null,
             Func<TParameter, bool> canExecute = null,
             bool allowsParallelExecution = false,
-            params ValueInfo[] parameters
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
             base(
                 @object,
                 id,
-                info,
+                name,
                 async (p, c) =>
                 {
                     await executeTaskFactory(p, c);
@@ -228,7 +240,9 @@ namespace SenseLab.Common.Commands
                 parameters,
                 null,
                 canExecute,
-                allowsParallelExecution
+                allowsParallelExecution,
+                description,
+                values
                 )
         { }
 
@@ -242,40 +256,50 @@ namespace SenseLab.Common.Commands
         #region Init
 
         public Command(
-                Objects.Object @object,
-                string id,
-                IdentityInfo info,
-                Action<CancellationTokenSource> execute,
-                Func<bool> canExecute = null,
-                bool isSynchronous = true,
-                bool allowsParallelExecution = false
-                ) :
-                base(
-                    @object,
-                    id,
-                    info,
-                    (p, c) => execute(c),
-                    p => canExecute(),
-                    isSynchronous,
-                    allowsParallelExecution
-                    )
+            Objects.Object @object,
+            string id,
+            string name,
+            Action<CancellationTokenSource> execute,
+            Func<bool> canExecute = null,
+            bool isSynchronous = true,
+            bool allowsParallelExecution = false,
+            string description = null,
+            IDictionary<string, object> values = null
+            ) :
+            base(
+                @object,
+                id,
+                name,
+                (p, c) => execute(c),
+                null,
+                p => canExecute(),
+                isSynchronous,
+                allowsParallelExecution,
+                description,
+                values
+                )
         { }
 
         public Command(
             Objects.Object @object,
             string id,
-            IdentityInfo info,
+            string name,
             Func<CancellationTokenSource, Task> executeTaskFactory,
             Func<bool> canExecute = null,
-            bool allowsParallelExecution = false
+            bool allowsParallelExecution = false,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
             base(
                 @object,
                 id,
-                info,
+                name,
                 (p, c) => executeTaskFactory(c),
+                null,
                 p => canExecute(),
-                allowsParallelExecution
+                allowsParallelExecution,
+                description,
+                values
                 )
         { }
 

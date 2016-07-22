@@ -1,8 +1,8 @@
-﻿using CeMaS.Common.Identity;
-using CeMaS.Common.Units;
+﻿using CeMaS.Common.Units;
 using CeMaS.Common.Validation;
 using SenseLab.Common.Values;
 using System;
+using System.Collections.Generic;
 
 namespace SenseLab.Common.Commands
 {
@@ -14,11 +14,13 @@ namespace SenseLab.Common.Commands
 
         public PhysicalValueInfo(
             string id,
-            IdentityInfo info,
+            string name,
             Type type,
-            Unit unit
+            Unit<string> unit,
+            string description = null,
+            IDictionary<string, object> values = null
             ) :
-            base(id, info, type)
+            base(id, name, type, description, values)
         {
             Unit = unit;
         }
@@ -33,16 +35,16 @@ namespace SenseLab.Common.Commands
 
         #endregion
 
-        public Unit Unit
+        public Unit<string> Unit
         {
             get { return unit; }
             set
             {
-                value.ValidateNonNull();
+                Argument.NonNull(value);
                 SetPropertyValue(ref unit, value);
             }
         }
 
-        private Unit unit;
+        private Unit<string> unit;
     }
 }

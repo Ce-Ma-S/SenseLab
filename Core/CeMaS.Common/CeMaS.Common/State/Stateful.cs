@@ -1,6 +1,7 @@
-﻿using CeMaS.Common.Properties;
+﻿using CeMaS.Common.Collections;
 using CeMaS.Common.Validation;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -25,6 +26,10 @@ namespace CeMaS.Common.State
         /// <remarks>It is intended for <see cref="IStateful.GetState"/> implementations.</remarks>
         /// <param name="stateful">Stateful.</param>
         /// <param name="state">State.</param>
+        /// <param name="getPropertyValue">
+        /// Optional property value getter.
+        /// If null or <see cref="Optional{object}.None"/> is returned, <see cref="PropertyInfo.GetValue(object)"/> is used.
+        /// </param>
         /// <param name="propertyFilter">
         /// Optional property filter for <paramref name="stateful"/> public properties.
         /// If null, <see cref="PropertyFilter"/> is used.
@@ -34,11 +39,12 @@ namespace CeMaS.Common.State
         /// <exception cref="ArgumentException"><paramref name="stateful"/> property value cannot be got.</exception>
         public static void FillState(
             this IStateful stateful,
-            IMetadataWritable state,
+            IDictionary<string, object> state,
+            Func<PropertyInfo, Optional<object>> getPropertyValue = null,
             Func<PropertyInfo, bool> propertyFilter = null
             )
         {
-            state.ValidateNonNull(nameof(state));
+            Argument.NonNull(state, nameof(state));
             ProcessProperties(
                 stateful,
                 propertyFilter,
@@ -46,7 +52,7 @@ namespace CeMaS.Common.State
                 {
                     try
                     {
-                        state[id] = property.GetValue(stateful);
+                        state[id] = GetPropertyValue(stateful, getPropertyValue, property);
                     }
                     catch (Exception e)
                     {
@@ -61,6 +67,10 @@ namespace CeMaS.Common.State
         /// <remarks>It is intended for <see cref="IStatefulWritable.SetState"/> implementations.</remarks>
         /// <param name="stateful">Stateful.</param>
         /// <param name="state">State.</param>
+        /// <param name="setPropertyValue">
+        /// Optional property value setter.
+        /// If <c>null</c> or <c>false</c> is returned, <see cref="PropertyInfo.SetValue(object)"/> is used.
+        /// </param>
         /// <param name="propertyFilter">
         /// Optional property filter for <paramref name="stateful"/> public properties.
         /// If null, <see cref="PropertyFilter"/> is used.
@@ -72,19 +82,20 @@ namespace CeMaS.Common.State
         /// <exception cref="ArgumentException"><paramref name="stateful"/> property value cannot be set.</exception>
         public static bool ApplyState(
             this IStatefulWritable stateful,
-            IMetadata state,
+            IReadOnlyDictionary<string, object> state,
+            Func<PropertyInfo, object, bool> setPropertyValue = null,
             Func<PropertyInfo, bool> propertyFilter = null
             )
         {
-            state.ValidateNonNull(nameof(state));
+            Argument.NonNull(state, nameof(state));
             bool changed = false;
             ProcessProperties(
                 stateful,
                 propertyFilter,
                 (id, property, required) =>
                 {
-                    object value = state[id];
-                    if (value == null)
+                    var value = state.Value(id);
+                    if (!value.HasValue)
                     {
                         if (required)
                             throw new ArgumentException($"Required state value '{id}' does not exist.", nameof(state));
@@ -93,7 +104,7 @@ namespace CeMaS.Common.State
                     }
                     try
                     {
-                        property.SetValue(stateful, value);
+                        SetPropertyValue(stateful, setPropertyValue, property, value);
                     }
                     catch (Exception e)
                     {
@@ -105,14 +116,45 @@ namespace CeMaS.Common.State
             return changed;
         }
 
+
+        private static object GetPropertyValue(
+            IStateful stateful,
+            Func<PropertyInfo, Optional<object>> getPropertyValue,
+            PropertyInfo property
+            )
+        {
+            var value = getPropertyValue == null ?
+                Optional<object>.None :
+                getPropertyValue(property);
+            if (!value.HasValue)
+                value = property.GetValue(stateful);
+            return value.Value;
+        }
+
+        private static void SetPropertyValue(
+            IStatefulWritable stateful,
+            Func<PropertyInfo, object, bool> setPropertyValue,
+            PropertyInfo property,
+            object value
+            )
+        {
+            if (
+                setPropertyValue == null ||
+                !setPropertyValue(property, value)
+                )
+            {
+                property.SetValue(stateful, value);
+            }
+        }
+
         private static void ProcessProperties(
             this IStateful stateful,
             Func<PropertyInfo, bool> propertyFilter,
             Action<string, PropertyInfo, bool> processProperty
             )
         {
-            stateful.ValidateNonNull(nameof(stateful));
-            var properties = stateful.GetType().GetTypeInfo().DeclaredProperties.
+            Argument.NonNull(stateful, nameof(stateful));
+            var properties = stateful.GetType().GetProperties().
                 Where(propertyFilter ?? PropertyFilter).
                 Select(i => new { Property = i, Attribute = GetStatefulAttribute(i) ?? new DataMemberAttribute() }).
                 OrderBy(i => i.Attribute.Order);

@@ -16,6 +16,11 @@ namespace CeMaS.Common.Collections
                 OnAdded(items);
         }
 
+        public IEnumerable<TId> Ids
+        {
+            get { return idToItem.Keys; }
+        }
+
         public TItem GetItem(TId id)
         {
             return idToItem[id];

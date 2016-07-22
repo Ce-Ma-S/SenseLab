@@ -1,22 +1,25 @@
-﻿using CeMaS.Common.Properties;
+﻿using CeMaS.Common.Collections;
+using CeMaS.Common.Properties;
 using CeMaS.Common.Validation;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace CeMaS.Common.Identity
 {
     [DataContract]
     public class IdentityInfo :
-        IIdentityInfo
+        IIdentityInfo,
+        IHaveNamedValuesWritable
     {
         public IdentityInfo(
             string name,
             string description = null,
-            Metadata metadata = null
+            IDictionary<string, object> values = null
             )
         {
             Name = name;
             Description = description;
-            Metadata = metadata ?? new Metadata();
+            Values = IdentityHelper.InitEnsureReadOnlyAsWell(values);
         }
 
         [DataMember(IsRequired = true)]
@@ -25,17 +28,22 @@ namespace CeMaS.Common.Identity
             get { return name; }
             set
             {
-                value.ValidateNonNullOrEmpty();
+                Argument.NonNullOrEmpty(value);
                 name = value;
             }
         }
         [DataMember]
         public string Description { get; set; }
         [DataMember]
-        public Metadata Metadata { get; }
-        IMetadata IHaveMetadata.Metadata
+        public IDictionary<string, object> Values { get; }
+        IReadOnlyDictionary<string, object> IHaveNamedValues.Values
         {
-            get { return Metadata; }
+            get { return Values.ReadOnly(); }
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
 
         private string name;

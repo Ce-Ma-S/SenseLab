@@ -1,5 +1,4 @@
-﻿using CeMaS.Common.Properties;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CeMaS.Common.State
 {
@@ -11,6 +10,6 @@ namespace CeMaS.Common.State
         /// <summary>
         /// Gets object`s state.
         /// </summary>
-        Task<IMetadata> GetState();
+        IReadOnlyDictionary<string, object> GetState();
     }
 }

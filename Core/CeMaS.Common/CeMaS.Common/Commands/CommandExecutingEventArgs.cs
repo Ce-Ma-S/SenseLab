@@ -10,7 +10,7 @@ namespace CeMaS.Common.Commands
         public CommandExecutingEventArgs(DateTimeOffset start, CancellationTokenSource cancellation, object parameter = null)
             : base(start, parameter)
         {
-            cancellation.ValidateNonNull(nameof(cancellation));
+            Argument.NonNull(cancellation, nameof(cancellation));
             this.cancellation = cancellation;
         }
 

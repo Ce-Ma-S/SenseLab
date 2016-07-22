@@ -1,30 +1,43 @@
 ﻿using CeMaS.Common.Identity;
 using CeMaS.Common.Validation;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace CeMaS.Common.Units
 {
-    public class Unit :
-        IId<string>
+    /// <summary>
+    /// <see cref="IUnitWritable{T}"/> base.
+    /// </summary>
+    /// <typeparam name="T">Identifier type.</typeparam>
+    [DataContract]
+    [KnownType(typeof(SIPrefix))]
+    public class Unit<T> :
+        Identity<T>,
+        IUnitWritable<T>
     {
         public Unit(
-            string id,
-            string symbol,
+            T id,
             string name,
-            string description = null
-            )
+            string symbol,
+            string description = null,
+            IDictionary<string, object> values = null
+            ) :
+            base(id, name, description, values)
         {
-            id.ValidateNonNullOrEmpty(nameof(id));
-            symbol.ValidateNonNullOrEmpty(nameof(symbol));
-            name.ValidateNonNullOrEmpty(nameof(name));
-            Id = id;
             Symbol = symbol;
-            Name = name;
-            Description = description;
         }
 
-        public string Id { get; }
-        public string Symbol { get; }
-        public string Name { get; }
-        public string Description { get; }
+        [DataMember(IsRequired = true)]
+        public string Symbol
+        {
+            get { return symbol; }
+            set
+            {
+                Argument.NonNullOrEmpty(value);
+                SetPropertyValue(ref symbol, value);
+            }
+        }
+
+        private string symbol;
     }
 }

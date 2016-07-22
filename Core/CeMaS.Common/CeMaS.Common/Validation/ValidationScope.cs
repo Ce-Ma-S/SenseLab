@@ -1,19 +1,42 @@
-﻿namespace CeMaS.Common.Validation
+﻿using CeMaS.Common.Identity;
+using CeMaS.Common.Properties;
+using System;
+
+namespace CeMaS.Common.Validation
 {
+    /// <summary>
+    /// Specifies validation scope.
+    /// </summary>
     public class ValidationScope :
-        IValidationScope
+        IdentityWithInfo<string>
     {
-        public ValidationScope(string name)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="id">
+        /// <see cref="IdentityBase{T}.Id"/>.
+        /// Empty means whole validated value (<see cref="Whole"/>).
+        /// </param>
+        /// <param name="info"><see cref="IdentityWithInfo{T}.Info"/>. If null, <paramref name="id"/> is used for <see cref="IdentityInfo.Name"/>.</param>
+        /// <exception cref="System.ArgumentNullException"><paramref name="id"/> is null.</exception>
+        public ValidationScope(
+            string id,
+            IdentityInfo info = null
+            ) :
+            base(
+                id,
+                info ?? new IdentityInfo(id)
+                )
         {
-            name.ValidateNonNullOrEmpty(nameof(name));
-            Name = name;
+            Argument.NonNull(id, nameof(id));
         }
 
-        public string Name { get; }
-
-        public override string ToString()
-        {
-            return Name;
-        }
+        /// <summary>
+        /// Represents whole validated value scope.
+        /// </summary>
+        public static readonly ValidationScope Whole = new ValidationScope(
+            string.Empty,
+            $"{nameof(ValidationScope)}_{nameof(Whole)}".ToIdentityInfo(Resources.ResourceManager)
+            );
     }
 }

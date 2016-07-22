@@ -23,11 +23,27 @@ namespace CeMaS.Common.Commands
             bool allowsParallelExecution = false
             )
         {
-            execute.ValidateNonNull(nameof(execute));
+            Argument.NonNull(execute, nameof(execute));
             this.isSynchronous = isSynchronous;
             executeTaskFactory = (p, cts) => new Task<TResult>(() => execute(p, cts), cts.Token);
             this.canExecute = canExecute;
             this.allowsParallelExecution = allowsParallelExecution;
+        }
+
+        public DelegateCommand(
+            Func<TParameter, TResult> execute,
+            Func<TParameter, bool> canExecute = null,
+            bool isSynchronous = true,
+            bool allowsParallelExecution = false
+            ) :
+            this(
+                (p, cts) => execute(p),
+                canExecute,
+                isSynchronous,
+                allowsParallelExecution
+                )
+        {
+            Argument.NonNull(execute, nameof(execute));
         }
 
         public DelegateCommand(
@@ -36,10 +52,24 @@ namespace CeMaS.Common.Commands
             bool allowsParallelExecution = false
             )
         {
-            executeTaskFactory.ValidateNonNull(nameof(executeTaskFactory));
+            Argument.NonNull(executeTaskFactory, nameof(executeTaskFactory));
             this.executeTaskFactory = executeTaskFactory;
             this.canExecute = canExecute;
             this.allowsParallelExecution = allowsParallelExecution;
+        }
+
+        public DelegateCommand(
+            Func<TParameter, Task<TResult>> executeTaskFactory,
+            Func<TParameter, bool> canExecute = null,
+            bool allowsParallelExecution = false
+            ) :
+            this(
+                (p, cts) => executeTaskFactory(p),
+                canExecute,
+                allowsParallelExecution
+                )
+        {
+            Argument.NonNull(executeTaskFactory, nameof(executeTaskFactory));
         }
 
         #endregion
@@ -102,7 +132,25 @@ namespace CeMaS.Common.Commands
                 allowsParallelExecution
                 )
         {
+            Argument.NonNull(execute, nameof(execute));
         }
+
+        public DelegateCommand(
+            Action<TParameter> execute,
+            Func<TParameter, bool> canExecute = null,
+            bool isSynchronous = true,
+            bool allowsParallelExecution = false
+            )
+            : this(
+                (p, cts) => execute(p),
+                canExecute,
+                isSynchronous,
+                allowsParallelExecution
+                )
+        {
+            Argument.NonNull(execute, nameof(execute));
+        }
+
         public DelegateCommand(
             Func<TParameter, CancellationTokenSource, Task> executeTaskFactory,
             Func<TParameter, bool> canExecute = null,
@@ -118,6 +166,21 @@ namespace CeMaS.Common.Commands
                 allowsParallelExecution
                 )
         {
+            Argument.NonNull(executeTaskFactory, nameof(executeTaskFactory));
+        }
+
+        public DelegateCommand(
+            Func<TParameter, Task> executeTaskFactory,
+            Func<TParameter, bool> canExecute = null,
+            bool allowsParallelExecution = false
+            )
+            : this(
+                (p, cts) => executeTaskFactory(p),
+                canExecute,
+                allowsParallelExecution
+                )
+        {
+            Argument.NonNull(executeTaskFactory, nameof(executeTaskFactory));
         }
     }
 
@@ -143,6 +206,23 @@ namespace CeMaS.Common.Commands
                 allowsParallelExecution
                 )
         {
+            Argument.NonNull(execute, nameof(execute));
+        }
+
+        public DelegateCommand(
+            Action execute,
+            Func<bool> canExecute = null,
+            bool isSynchronous = true,
+            bool allowsParallelExecution = false
+            )
+            : this(
+                cts => execute(),
+                canExecute,
+                isSynchronous,
+                allowsParallelExecution
+                )
+        {
+            Argument.NonNull(execute, nameof(execute));
         }
 
         public DelegateCommand(
@@ -158,6 +238,21 @@ namespace CeMaS.Common.Commands
                 allowsParallelExecution
                 )
         {
+            Argument.NonNull(executeTaskFactory, nameof(executeTaskFactory));
+        }
+
+        public DelegateCommand(
+            Func<Task> executeTaskFactory,
+            Func<bool> canExecute = null,
+            bool allowsParallelExecution = false
+            )
+            : this(
+                cts => executeTaskFactory(),
+                canExecute,
+                allowsParallelExecution
+                )
+        {
+            Argument.NonNull(executeTaskFactory, nameof(executeTaskFactory));
         }
     }
 }

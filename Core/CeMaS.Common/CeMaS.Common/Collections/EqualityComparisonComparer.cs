@@ -22,7 +22,7 @@ namespace CeMaS.Common.Collections
             Func<T, int> getHashCodeMethod = null
             )
         {
-            comparisonMethod.ValidateNonNull("comparisonMethod");
+            Argument.NonNull(comparisonMethod, nameof(comparisonMethod));
             ComparisonMethod = comparisonMethod;
             if (getHashCodeMethod == null)
                 getHashCodeMethod = obj => obj.GetHashCode();
