@@ -13,4 +13,5 @@ You can visit project page at
     - http://ce-ma-s.net/en/projekty/software/senselab/start
     
 We have limited capacity to develop this software now and devote our time to another clean technology developments.
+
 **You are welcome to take the ideas or prototype in its current state further and create open platform useful for others.**
